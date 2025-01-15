@@ -1,0 +1,160 @@
+{
+    "pageSize": 25,
+    "pageNumber": 1,
+    "result": {
+        "classType": "searchResults",
+        "results": [
+            {
+                "ui": "D000141",
+                "rootSource": "MSH",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MSH/D000141",
+                "name": "Acidosis, Renal Tubular"
+            },
+            {
+                "ui": "1776003",
+                "rootSource": "SNOMEDCT_US",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/SNOMEDCT_US/1776003",
+                "name": "Renal tubular acidosis"
+            },
+            {
+                "ui": "HP:0001947",
+                "rootSource": "HPO",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/HPO/HP:0001947",
+                "name": "Renal tubular acidosis"
+            },
+            {
+                "ui": "10038535",
+                "rootSource": "MDR",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MDR/10038535",
+                "name": "Renal tubular acidosis"
+            },
+            {
+                "ui": "MTHU006717",
+                "rootSource": "OMIM",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/OMIM/MTHU006717",
+                "name": "Renal tubular acidosis"
+            },
+            {
+                "ui": "30656",
+                "rootSource": "MEDCIN",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MEDCIN/30656",
+                "name": "renal tubular acidosis"
+            },
+            {
+                "ui": "C28129",
+                "rootSource": "NCI",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/NCI/C28129",
+                "name": "Renal Tubular Acidosis"
+            },
+            {
+                "ui": "0000000636",
+                "rootSource": "CHV",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/CHV/0000000636",
+                "name": "renal tubular acidosis"
+            },
+            {
+                "ui": "D-6541",
+                "rootSource": "SNM",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/SNM/D-6541",
+                "name": "Renal tubular acidosis"
+            },
+            {
+                "ui": "K08y4",
+                "rootSource": "RCD",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/RCD/K08y4",
+                "name": "Renal tubular acidosis"
+            },
+            {
+                "ui": "1011674",
+                "rootSource": "CCPSS",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/CCPSS/1011674",
+                "name": "RENAL TUBULAR ACIDOSIS"
+            },
+            {
+                "ui": "10000494",
+                "rootSource": "MDR",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MDR/10000494",
+                "name": "Acidosis renal tubular"
+            },
+            {
+                "ui": "10038353",
+                "rootSource": "MDR",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MDR/10038353",
+                "name": "Renal acidosis tubular"
+            },
+            {
+                "ui": "MTHU076985",
+                "rootSource": "ICPC2ICD10ENG",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/ICPC2ICD10ENG/MTHU076985",
+                "name": "tubular acidosis; renal"
+            },
+            {
+                "ui": "U000024",
+                "rootSource": "DXP",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/DXP/U000024",
+                "name": "ACIDOSIS, RENAL, TUBULAR"
+            },
+            {
+                "ui": "1776003",
+                "rootSource": "SCTSPA",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/SCTSPA/1776003",
+                "name": "acidosis tubular renal"
+            },
+            {
+                "ui": "0623",
+                "rootSource": "WHO",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/WHO/0623",
+                "name": "RENAL TUBULAR DISORDER"
+            },
+            {
+                "ui": "D6-98100",
+                "rootSource": "SNMI",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/SNMI/D6-98100",
+                "name": "Renal tubular acidosis, NOS"
+            },
+            {
+                "ui": "KIDNEY TUBUL DIS",
+                "rootSource": "CST",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/CST/KIDNEY TUBUL DIS",
+                "name": "KIDNEY TUBULAR DISORDER"
+            },
+            {
+                "ui": "N25.89",
+                "rootSource": "ICD10CM",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/ICD10CM/N25.89",
+                "name": "Other disorders resulting from impaired renal tubular function"
+            },
+            {
+                "ui": "D000141",
+                "rootSource": "MSHSPA",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MSHSPA/D000141",
+                "name": "Acidosis Tubular Renal"
+            },
+            {
+                "ui": "10038535",
+                "rootSource": "MDRSPA",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MDRSPA/10038535",
+                "name": "Acidosis tubular renal"
+            },
+            {
+                "ui": "10038353",
+                "rootSource": "MDRSPA",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MDRSPA/10038353",
+                "name": "Acidosis tubular renal"
+            },
+            {
+                "ui": "10000494",
+                "rootSource": "MDRSPA",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/MDRSPA/10000494",
+                "name": "Acidosis tubular renal"
+            },
+            {
+                "ui": "0623",
+                "rootSource": "WHOSPA",
+                "uri": "https://uts-ws.nlm.nih.gov/rest/content/2024AB/source/WHOSPA/0623",
+                "name": "TUBULO RENAL, TRASTORNO"
+            }
+        ],
+        "recCount": 157
+    }
+}
