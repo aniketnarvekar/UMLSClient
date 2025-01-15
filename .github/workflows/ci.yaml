@@ -26,4 +26,4 @@ jobs:
 
       # Run tests
       - name: Run tests
-        run: doppler run -- swift test
+        run: swift test
