@@ -2,4 +2,4 @@ build:
 	swift build
 
 test:
-	doppler run -- swift test --parallel
+	doppler run -- swift test
