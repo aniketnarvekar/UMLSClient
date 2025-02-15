@@ -38,3 +38,4 @@ jobs:
           UMLS_API_KEY: ${{ secrets.UMLS_API_KEY }}
           UMLS_HOST: ${{ secrets.UMLS_HOST }}
           UMLS_VERSION: ${{ secrets.UMLS_HOST  }}
+          UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
