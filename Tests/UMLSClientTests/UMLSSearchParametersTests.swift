@@ -4,11 +4,6 @@
 import XCTest
 @testable import UMLSClient
 
-func randomString(length: Int) -> String {
-    let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    return String((0..<length).map{ _ in letters.randomElement()! })
-}
-
 enum StubError: Error {
     case resourceNotFount(name: String, extension: String)
 }
@@ -43,7 +38,7 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testDefaultSearchParameters() throws {
-        let searchString = randomString(length: 100)
+        let searchString = String.randomAlphaNumericString(of: 100)
         let searchParameters = try! UMLSSearchParametersBuilder(searchString).build()
         XCTAssertEqual(searchParameters.string, searchString)
         XCTAssertEqual(searchParameters.inputType, UMLSSearchInputType.atom)
@@ -58,7 +53,7 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetEmptySearchString() throws {
-        let searchString = randomString(length: 100)
+        let searchString = String.randomAlphaNumericString(of: 100)
         let searchParameterBuilder = try UMLSSearchParametersBuilder(searchString)
         do {
             _ = try searchParameterBuilder.setSearchText("")
@@ -70,16 +65,16 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetSearchString() throws {
-        var searchString = randomString(length: 10)
+        var searchString = String.randomAlphaNumericString(of: 10)
         var searchParametersBuilder = try UMLSSearchParametersBuilder(searchString)
         XCTAssertEqual(searchParametersBuilder.build().string, searchString)
-        searchString = randomString(length: 10)
+        searchString = String.randomAlphaNumericString(of: 10)
         searchParametersBuilder = try searchParametersBuilder.setSearchText(searchString)
         XCTAssertEqual(searchParametersBuilder.build().string, searchString)
     }
 
     func testSetSearchInputType() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let inputTypes: [UMLSSearchInputType] = [.atom, .code, .sourceConcept, .sourceDescriptor, .sourceUI, .tty]
         inputTypes.forEach({ inputType in
             let searchParameters = searchParameterBuilder.setInputType(inputType).build()
@@ -88,7 +83,7 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetIncludeAbsolute() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let bools = [true, false]
         bools.forEach { bool in
             let searchParameters = searchParameterBuilder.setIncludeObsolete(bool).build()
@@ -97,7 +92,7 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetIncludeSuppressible() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let bools = [true, false]
         bools.forEach { bool in
             let searchParameters = searchParameterBuilder.setIncludeSuppressible(bool).build()
@@ -106,34 +101,22 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSourceVocabularies() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         XCTAssertTrue(searchParameterBuilder.build().sourceVocabularies.isEmpty)
-        let sourceVocabulary = randomString(length: 10)
+        let sourceVocabulary = UMLSSourceVocabulary.random()
         let searchParameters = try searchParameterBuilder.addSourceVocabulary(sourceVocabulary).build()
         XCTAssertEqual(searchParameters.sourceVocabularies.count, 1)
         XCTAssertEqual(searchParameters.sourceVocabularies.first, sourceVocabulary)
         XCTAssertTrue(searchParameterBuilder.removeSourceVocabulary(sourceVocabulary).build().sourceVocabularies.isEmpty)
-        let sourceVocabularies = (0..<3).map({ _ in randomString(length: 10) })
+        let sourceVocabularies = UMLSSourceVocabulary.allCases[..<3]
         XCTAssertEqual(
             try sourceVocabularies.map({ try searchParameterBuilder.addSourceVocabulary($0) }).last!.build().sourceVocabularies.count,
             3
         )
     }
 
-    func testAddEmptySourceVocabulary() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
-        XCTAssertTrue(searchParameterBuilder.build().sourceVocabularies.isEmpty)
-        do {
-            _ = try searchParameterBuilder.addSourceVocabulary("")
-        } catch let error as UMLSSearchParametersBuilder.BuildError {
-            XCTAssertEqual(error, UMLSSearchParametersBuilder.BuildError.emptySourceVocabularyName)
-        } catch {
-            XCTFail("Unexpected Error: \(error)")
-        }
-    }
-
     func testSetSearchType() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let searchTypes: [UMLSSearchType] = [.exact, .leftTruncation, .normalizedString, .normalizedWords, .rightTruncation, .words]
         searchTypes.forEach({ searchType in
             XCTAssertEqual(searchParameterBuilder.setSearchType(searchType).build().searchType, searchType)
@@ -141,7 +124,7 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetPartialSearch() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let bools: [Bool] = [true, false]
         bools.forEach { bool in
             XCTAssertEqual(searchParameterBuilder.setPartialSearch(bool).build().partialSearch, bool)
@@ -149,14 +132,14 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetPageSizeGreaterThenZero() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let pageSize = Int.random(in: 0...100)
         let searchParameter = try searchParameterBuilder.setPageSize(pageSize).build()
         XCTAssertEqual(searchParameter.pageSize, pageSize)
     }
 
     func testSetPageSizeLessThenZero() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let negNumber = Int.random(in: Int.min..<0)
         do {
             _ = try searchParameterBuilder.setPageSize(negNumber)
@@ -168,7 +151,7 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetPageSizeEqualToZero() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         do {
             _ = try searchParameterBuilder.setPageSize(0)
         } catch let error as UMLSSearchParametersBuilder.BuildError {
@@ -179,14 +162,14 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetPageNumberGreaterThenZero() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let pageNumber = Int.random(in: 0...100)
         let searchParameters = try searchParameterBuilder.setPageNumber(pageNumber).build()
         XCTAssertEqual(searchParameters.pageNumber, pageNumber)
     }
 
     func testSetPageNumberLessThenZero() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         let negNumber = Int.random(in: Int.min..<0)
         do {
             _ = try searchParameterBuilder.setPageNumber(negNumber).build()
@@ -198,7 +181,7 @@ final class UMLSSearchParametersTests: XCTestCase {
     }
 
     func testSetPageNumberEqualToZero() throws {
-        let searchParameterBuilder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let searchParameterBuilder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
         do {
             _ = try searchParameterBuilder.setPageNumber(0)
         } catch let error as UMLSSearchParametersBuilder.BuildError {

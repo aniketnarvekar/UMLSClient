@@ -29,7 +29,7 @@ jobs:
 
       # Run tests
       - name: Run tests
-        run: doppler run -- swift test
+        run: make test
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
           DOPPLER_CONFIG: ${{ secrets.DOPPLER_CONFIG }}

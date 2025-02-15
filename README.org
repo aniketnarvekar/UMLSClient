@@ -1,0 +1,44 @@
+#+TITLE: UMLS REST API Client
+
+* Introduction
+    A Swift REST API client to query [UMLS REST API](https://documentation.uts.nlm.nih.gov/rest/home.html).
+
+* Testing
+
+** Requirements
+
+*** Environment Variables
+For testing the package requires following environment arguments:
+   | Variable               | Type   | Description                                    |
+   |------------------------+--------+------------------------------------------------|
+   | UMLS_HOST              | URL    | The base URL                                   |
+   | UMLS_API_KEY           | String | The UMLS authentication key                    |
+   | UMLS_PAGE_CONTENT_SIZE | Int    | Max number of size the mock server can handler |
+   | UMLS_VERSION           | String | The UMLS version                               |
+
+*** Cli Commands
+
+The `Makefile` Uses [[https://docs.doppler.com/docs/cli][Doppler Cli]] for inject all the above environment variables for testing.
+
+#+begin_src makefile
+make test
+#+end_src
+
+or
+
+you can use any other method to define this environment in your system. Then you should use following command instade of `make`.
+
+#+begin_src swift
+swift test --parallel
+#+end_src
+
+NOTE: ~--parallel~ to run test in parallel. See ~swift help test~ for more information.
+
+* Usage
+
+** Add package dependency
+
+*** In swiftPM
+See [[https://github.com/aniketnarvekar/UMLSCli][UMLSCli]] SwiftPM Command Line tool's [[https://github.com/aniketnarvekar/UMLSCli/blob/main/Package.swift][Package.swift]].
+*** In Xcode
+See [[https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app][Adding package dependencies to your app]]

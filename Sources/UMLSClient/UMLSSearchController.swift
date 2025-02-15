@@ -38,7 +38,7 @@ public struct UMLSVersion: Equatable {
     /// Release part of UMLS version.
     public let release: Release
 
-    /// Initialize `UMLSVERSION` object.
+    /// Initialise `UMLSVERSION` object.
     /// - Parameters:
     ///   - year: Year of release.
     ///   - release: Major and minor release.

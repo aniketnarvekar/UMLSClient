@@ -60,7 +60,7 @@ public protocol UMLSSearchParameters {
     /// The return identiifer type.
     var returnIdType: UMLSSearchReturnIDType { get }
     /// The list of UMLS source vocabularies.
-    var sourceVocabularies: [String] { get }
+    var sourceVocabularies: [UMLSSourceVocabulary] { get }
     /// The search type.
     var searchType: UMLSSearchType { get }
     /// Whether th search is partical or not.
@@ -77,7 +77,7 @@ private struct __UMLSSearchParameters: UMLSSearchParameters {
     var includeObsolete: Bool
     var includeSuppressible: Bool
     var returnIdType: UMLSSearchReturnIDType
-    var sourceVocabularies: [String]
+    var sourceVocabularies: [UMLSSourceVocabulary]
     var searchType: UMLSSearchType
     var partialSearch: Bool
     var pageNumber: Int
@@ -89,7 +89,7 @@ private struct __UMLSSearchParameters: UMLSSearchParameters {
         includeObsolete: Bool,
         includeSuppressible: Bool,
         returnIdType: UMLSSearchReturnIDType,
-        sourceVocabularies: [String],
+        sourceVocabularies: [UMLSSourceVocabulary],
         searchType: UMLSSearchType,
         partialSearch: Bool,
         pageNumber: Int,
@@ -117,7 +117,7 @@ public class UMLSSearchParametersBuilder {
     private var includeAbsolute: Bool?
     private var includeSuppressible: Bool?
     private var returnIdType: UMLSSearchReturnIDType?
-    private var sourceVocabularies: [String] = []
+    private var sourceVocabularies: [UMLSSourceVocabulary] = []
     private var searchType: UMLSSearchType?
     private var partialSearch: Bool?
     private var pageNumber: Int?
@@ -128,7 +128,6 @@ public class UMLSSearchParametersBuilder {
         case emptySearchString
         case invalidPageSize(number: Int)
         case invalidPageNumber(number: Int)
-        case emptySourceVocabularyName
     }
 
     /// Initialize `UMLSSearchParametersBuilder` object.
@@ -185,22 +184,20 @@ public class UMLSSearchParametersBuilder {
     /// The string should be UMLS asserted [source vocabulary](https://www.nlm.nih.gov/research/umls/sourcereleasedocs/) abbreviation.
     /// - Parameter string:
     /// - Returns: Returns reference to `Self`.
-    public func addSourceVocabulary(_ string: String) throws -> Self {
+    public func addSourceVocabulary(_ sourceVocabulary: UMLSSourceVocabulary) throws -> Self {
         // TODO: User source vocabulary as swift object for compile time validation of the source vocabulary.
-        guard !string.isEmpty else {
-            throw BuildError.emptySourceVocabularyName
-        }
-        if !self.sourceVocabularies.contains(string) {
-            self.sourceVocabularies.append(string)
+        if !self.sourceVocabularies.contains(sourceVocabulary) {
+            self.sourceVocabularies.append(sourceVocabulary)
         }
         return self
     }
 
     /// Remove source vocabulary if present.
-    /// - Parameter string: A source vocabulary.
+    ///
+    /// - Parameter sourceVocabulary: A source vocabulary.
     /// - Returns: Returns reference to `Self`.
-    public func removeSourceVocabulary(_ string: String) -> Self {
-        if let index = self.sourceVocabularies.firstIndex(of: string) {
+    public func removeSourceVocabulary(_ sourceVocabulary: UMLSSourceVocabulary) -> Self {
+        if let index = self.sourceVocabularies.firstIndex(of: sourceVocabulary) {
             self.sourceVocabularies.remove(at: index)
         }
         return self

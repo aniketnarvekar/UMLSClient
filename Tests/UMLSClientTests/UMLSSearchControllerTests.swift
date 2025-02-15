@@ -92,7 +92,7 @@ final class UMLSVersionTests: XCTestCase {
 
     func testInitializeWithInvalidStringSize() throws {
         [1, 2, 3, 4, 5, 7, 8, 9, 10]
-            .map(randomString(length:))
+            .map(String.randomAlphaNumericString(of:))
             .forEach { string in
                 do {
                     _ = try UMLSVersion(string: string)
@@ -106,12 +106,12 @@ final class UMLSVersionTests: XCTestCase {
     }
 
     func testInitiallizeWithIllFormedYearPart() throws {
-        (0..<100)
-            .map({ _ in randomString(length: 4) })
-            .map({ $0 + "AA" })
+        try (0..<100)
+            .map({ _ in String.randomAlphaNumericString(of: 4) })
             .forEach { string in
+                try XCTSkipIf(!string.contains(where: { !$0.isNumber }))
                 do {
-                    _ = try UMLSVersion(string: string)
+                    _ = try UMLSVersion(string: string + "AA")
                     XCTFail("UMLSVersion string initializer does not raise error for string: \(string)")
                 } catch let error as UMLSVersion.VersionStringError {
                     XCTAssertEqual(error, .invalidYear(string: String(string[...String.Index(utf16Offset: 3, in: string)])))
@@ -151,7 +151,7 @@ final class UMLSVersionTests: XCTestCase {
     func testInitializeWithUnsupportedRelease() throws {
         (2008...2024)
             .map({ int in
-                let str = randomString(length: 2)
+                let str = String.randomAlphaNumericString(of: 2)
                 return (str, "\(int)\(str)")
             })
             .forEach { set in
@@ -246,7 +246,7 @@ final class UMLSSearchControllerTests: XCTestCase {
     }
 
     func testCompleteWordSearch() async throws {
-        let result = try await searchController.search(UMLSSearchParametersBuilder(randomString(length: 10)).build())
+        let result = try await searchController.search(UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10)).build())
         XCTAssertGreaterThan(result.number, 0)
         XCTAssertGreaterThan(result.size, 0)
         XCTAssertGreaterThan(result.count, 0)
@@ -254,7 +254,7 @@ final class UMLSSearchControllerTests: XCTestCase {
     }
 
     func testPartialWordSearch() async throws {
-        let builder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let builder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
             .setPartialSearch(true)
         let result = try await searchController.search(builder.build())
         XCTAssertGreaterThan(result.number, 0)
@@ -264,7 +264,7 @@ final class UMLSSearchControllerTests: XCTestCase {
     }
 
     func testCompleteExactSearch() async throws {
-        let builder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let builder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
             .setSearchType(.exact)
         let result = try await searchController.search(builder.build())
         XCTAssertGreaterThan(result.number, 0)
@@ -274,7 +274,7 @@ final class UMLSSearchControllerTests: XCTestCase {
     }
 
     func testParticalExactSearch() async throws {
-        let builder = try UMLSSearchParametersBuilder(randomString(length: 10))
+        let builder = try UMLSSearchParametersBuilder(String.randomAlphaNumericString(of: 10))
             .setSearchType(.exact)
             .setPartialSearch(true)
         let result = try await searchController.search(builder.build())
