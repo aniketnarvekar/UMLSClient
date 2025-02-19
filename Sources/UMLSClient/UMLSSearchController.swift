@@ -8,8 +8,8 @@ public struct UMLSVersion: Equatable {
 
   /// UMLS version release.
   public enum Release: String {
-    case AA
-    case AB
+    case aa = "AA"
+    case ab = "AB"
   }
 
   /// Release year for the UMLS.

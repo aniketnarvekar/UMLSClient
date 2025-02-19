@@ -364,7 +364,7 @@ public class UMLSClient {
   private let session: URLSession
   private let decoder: JSONDecoder
 
-  private lazy var __searchController: UMLSSearchController = { [unowned self] in
+  private lazy var searchCon: UMLSSearchController = { [unowned self] in
     __UMLSSearchController(
       apiKey: self.apiKey,
       baseURL: self.baseURL,
@@ -374,7 +374,7 @@ public class UMLSClient {
     )
   }()
 
-  private lazy var __conceptController: UMLSConceptController = { [unowned self] in
+  private lazy var conceptCon: UMLSConceptController = { [unowned self] in
     __UMLSConceptController(
       apiKey: self.apiKey,
       baseURL: self.baseURL,
@@ -404,12 +404,12 @@ public class UMLSClient {
 
   /// The search controller object.
   public func searchController() -> UMLSSearchController {
-    __searchController
+    searchCon
   }
 
   /// The concept controller object.
   public func conceptController() -> UMLSConceptController {
-    __conceptController
+    conceptCon
   }
 
 }

@@ -61,7 +61,7 @@ final class UMLSAtomInfoDecodingTests: XCTestCase {
   }
 
   func testUI() throws {
-    [
+    let data = [
       atomInfo(ui: "A"),
       atomInfo(ui: "A1"),
       atomInfo(ui: "A123456"),
@@ -71,35 +71,39 @@ final class UMLSAtomInfoDecodingTests: XCTestCase {
       atomInfo(ui: "A1234567_"),
       atomInfo(ui: "A1234567A"),
       atomInfo(ui: "A1234©670"),
-    ].forEach { jsonData in
-      decoder.assertCorrupted(from: jsonData, for: "ui")
+    ]
+
+    for data in data {
+      decoder.assertCorrupted(from: data, for: "ui")
     }
   }
 
   func testInvalidIsSuppressible() throws {
-    [
+    let data = [
       String.randomAlphaNumericString(of: 4),
       String.randomAlphaNumericString(of: 5),
     ].map({ atomInfo(isSuppressible: $0) })
-      .forEach { jsonData in
-        decoder.assertCorrupted(
-          from: jsonData,
-          for: "suppressible"
-        )
-      }
+
+    for data in data {
+      decoder.assertCorrupted(
+        from: data,
+        for: "suppressible"
+      )
+    }
   }
 
   func testInvalidIsObsolete() throws {
-    [
+    let data = [
       String.randomAlphaNumericString(of: 4),
       String.randomAlphaNumericString(of: 5),
     ].map({ atomInfo(isObsolete: $0) })
-      .forEach { jsonData in
-        decoder.assertCorrupted(
-          from: jsonData,
-          for: "obsolete"
-        )
-      }
+
+    for data in data {
+      decoder.assertCorrupted(
+        from: data,
+        for: "obsolete"
+      )
+    }
   }
 
   func testEmptyName() throws {
@@ -108,23 +112,25 @@ final class UMLSAtomInfoDecodingTests: XCTestCase {
   }
 
   func testInvalidTermType() throws {
-    [
+    let data = [
       "",
       String.randomAlphaNumericString(of: 10),
     ].map({ atomInfo(termType: $0) })
-      .forEach { jsonData in
-        decoder.assertCorrupted(from: jsonData, for: "termType")
-      }
+
+    for data in data {
+      decoder.assertCorrupted(from: data, for: "termType")
+    }
   }
 
   func testInvalidLanguage() throws {
-    [
+    let data = [
       "",
       String.randomAlphaNumericString(of: 10),
     ].map({ atomInfo(language: $0) })
-      .forEach { jsonData in
-        decoder.assertCorrupted(from: jsonData, for: "language")
-      }
+
+    for data in data {
+      decoder.assertCorrupted(from: data, for: "language")
+    }
   }
 
 }

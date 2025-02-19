@@ -90,7 +90,8 @@ final class UMLSSearchParametersTests: XCTestCase {
     let searchParameterBuilder = try UMLSSearchParametersBuilder(
       String.randomAlphaNumericString(of: 10))
     let bools = [true, false]
-    bools.forEach { bool in
+
+    for bool in bools {
       let searchParameters = searchParameterBuilder.setIncludeObsolete(bool).build()
       XCTAssertEqual(searchParameters.includeObsolete, bool)
     }
@@ -100,7 +101,8 @@ final class UMLSSearchParametersTests: XCTestCase {
     let searchParameterBuilder = try UMLSSearchParametersBuilder(
       String.randomAlphaNumericString(of: 10))
     let bools = [true, false]
-    bools.forEach { bool in
+
+    for bool in bools {
       let searchParameters = searchParameterBuilder.setIncludeSuppressible(bool).build()
       XCTAssertEqual(searchParameters.includeSuppressible, bool)
     }
@@ -141,7 +143,8 @@ final class UMLSSearchParametersTests: XCTestCase {
     let searchParameterBuilder = try UMLSSearchParametersBuilder(
       String.randomAlphaNumericString(of: 10))
     let bools: [Bool] = [true, false]
-    bools.forEach { bool in
+
+    for bool in bools {
       XCTAssertEqual(searchParameterBuilder.setPartialSearch(bool).build().partialSearch, bool)
     }
   }

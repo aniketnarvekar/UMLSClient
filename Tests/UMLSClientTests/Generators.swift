@@ -86,7 +86,7 @@ extension String {
 
   static func randomNumericString(of size: UInt8) -> String {
     let array = (0...size).map({ _ in Character(.init(UInt8.numericCharacterCodes.randomElement()!))
-      })
+    })
     return String(array)
   }
 

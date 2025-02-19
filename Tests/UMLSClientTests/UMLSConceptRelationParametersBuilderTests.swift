@@ -55,7 +55,7 @@ final class UMLSConceptRelationParametersBuilderTests: XCTestCase {
       builder
       .setPageInfo(.init(size: 0))
       .build()
-    XCTAssertEqual(result.page.size, PageInfo.DEFAULT_SIZE)
+    XCTAssertEqual(result.page.size, PageInfo.defaultSize)
   }
 
   func testPageNumberGreaterThanZero() throws {
@@ -71,7 +71,7 @@ final class UMLSConceptRelationParametersBuilderTests: XCTestCase {
       builder
       .setPageInfo(.init(number: 0))
       .build()
-    XCTAssertEqual(result.page.number, PageInfo.DEFAULT_NUMBER)
+    XCTAssertEqual(result.page.number, PageInfo.defaultNumber)
   }
 
   func testAddUniqueRelationLabel() throws {

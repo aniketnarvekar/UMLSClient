@@ -145,12 +145,14 @@ final class UMLSConceptInfoDecodableTests: XCTestCase {
   }
 
   func testInvalidDateAddedFormat() throws {
-    [
+    let data = [
       conceptJSON(dateAdded: "\(Int.random(in: 13...31))-1-1993"),
       conceptJSON(dateAdded: "04-\(Int.random(in: 32...Int.max))-1993"),
-    ].forEach { jsonData in
+    ]
+
+    for data in data {
       decoder.assertCorrupted(
-        from: jsonData,
+        from: data,
         for: "dateAdded",
         debugDescription: "Date string does not match format expected by formatter."
       )
@@ -158,12 +160,14 @@ final class UMLSConceptInfoDecodableTests: XCTestCase {
   }
 
   func testInvalidMajorRevisionDateFormat() throws {
-    [
+    let data = [
       conceptJSON(majorRevisionDate: "\(Int.random(in: 13...31))-10-2022"),
       conceptJSON(majorRevisionDate: "8-\(Int.random(in: 31...Int.max))-2022"),
-    ].forEach { jsonData in
+    ]
+
+    for data in data {
       decoder.assertCorrupted(
-        from: jsonData,
+        from: data,
         for: "majorRevisionDate",
         debugDescription: "Date string does not match format expected by formatter."
       )

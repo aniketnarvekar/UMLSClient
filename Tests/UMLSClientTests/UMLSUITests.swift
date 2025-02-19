@@ -20,7 +20,7 @@ final class UMLSUITests: XCTestCase {
   }
 
   func testInitializeInvalidFormat() throws {
-    [
+    let strings = [
       "C12345678",
       "C123456",
       "C123silc",
@@ -29,9 +29,11 @@ final class UMLSUITests: XCTestCase {
       "12345C67",
       "1234567C",
       "1234_3689",
-    ].forEach { str in
+    ]
+
+    for string in strings {
       do {
-        _ = try UMLSUI<UMLSConcept>(string: str)
+        _ = try UMLSUI<UMLSConcept>(string: string)
         XCTFail("Unable to raise UMLSUIStringError error")
       } catch let error as UMLSUIStringError {
         switch error {

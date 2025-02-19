@@ -2,7 +2,7 @@
 
 extension String {
 
-  public static var NONE: String {
+  public static var none: String {
     "NONE"
   }
 

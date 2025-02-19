@@ -99,7 +99,7 @@ final class UMLSRelationshipDecodingTests: XCTestCase {
   }
 
   func testInvalidUI() throws {
-    let jsonData: [Data] = [
+    let data: [Data] = [
       "\(Int.random(in: 1_000_000_000...9_999_999_999))",
       "C\(Int.random(in: 100_000_000...999_999_999))",
       "\(String.randomAlphaNumericString(of: 10))",
@@ -108,8 +108,8 @@ final class UMLSRelationshipDecodingTests: XCTestCase {
     ]
     .map({ getUMLSRelationJSON(ui: $0) })
 
-    jsonData.forEach { jsonData in
-      decoder.assertCorrupted(from: jsonData, for: "ui")
+    for data in data {
+      decoder.assertCorrupted(from: data, for: "ui")
     }
   }
 
@@ -119,7 +119,7 @@ final class UMLSRelationshipDecodingTests: XCTestCase {
   }
 
   func testNoSourceUI() throws {
-    let jsonData = getUMLSRelationJSON(sourceUI: .NONE)
+    let jsonData = getUMLSRelationJSON(sourceUI: .none)
     let object = try decoder.decode(from: jsonData)
     XCTAssertNil(object.sourceUI)
   }
@@ -130,7 +130,7 @@ final class UMLSRelationshipDecodingTests: XCTestCase {
   }
 
   func testNoGroupID() throws {
-    let jsonData = getUMLSRelationJSON(groupID: .NONE)
+    let jsonData = getUMLSRelationJSON(groupID: .none)
     let result = try decoder.decode(from: jsonData)
     XCTAssertNil(result.groupID)
   }

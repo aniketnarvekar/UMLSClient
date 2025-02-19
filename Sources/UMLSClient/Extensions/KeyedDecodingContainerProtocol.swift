@@ -55,7 +55,7 @@ extension KeyedDecodingContainerProtocol {
   /// - Throws: `DecodingError.valueNotFound` if self has a null entry for the given key.
   public func decodeNoneString(forKey key: Self.Key) throws -> String? {
     let string = try self.decodeNonEmptyString(forKey: key)
-    return string == .NONE ? nil : string
+    return string == .none ? nil : string
   }
 
   /// Decodes `Int` value for given key.

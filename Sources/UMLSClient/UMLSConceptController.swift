@@ -381,12 +381,6 @@ private struct __UMLSConceptDefinitionParameters: UMLSConceptDefinitionParameter
   var sourceVocabularies: [UMLSSourceVocabulary]
   var page: PageInfo
 
-  init(concept: UMLSUI<UMLSConcept>, sourceVocabularies: [UMLSSourceVocabulary], page: PageInfo) {
-    self.concept = concept
-    self.sourceVocabularies = sourceVocabularies
-    self.page = page
-  }
-
 }
 
 public protocol UMLSRelationParameters {
@@ -430,24 +424,6 @@ private struct __UMLSConceptRelationParameters: UMLSConceptRelationParameters {
   var sourceVocabularies: [UMLSSourceVocabulary]
 
   var page: PageInfo
-
-  init(
-    concept: UMLSUI<UMLSConcept>,
-    relationLabels: [UMLSRelationLabel],
-    additionalRelationLabels: [UMLSAdditionalRelationLabel],
-    includeObsolete: Bool,
-    includeSuppressible: Bool,
-    sourceVocabularies: [UMLSSourceVocabulary],
-    page: PageInfo
-  ) {
-    self.concept = concept
-    self.relationLabels = relationLabels
-    self.additionalRelationLabels = additionalRelationLabels
-    self.includeObsolete = includeObsolete
-    self.includeSuppressible = includeSuppressible
-    self.sourceVocabularies = sourceVocabularies
-    self.page = page
-  }
 
 }
 
@@ -533,8 +509,8 @@ public struct PageInfo: Equatable {
   public let number: UInt
 
   public init(
-    size: UInt = PageInfo.DEFAULT_SIZE,
-    number: UInt = PageInfo.DEFAULT_NUMBER
+    size: UInt = PageInfo.defaultSize,
+    number: UInt = PageInfo.defaultNumber
   ) {
     self.size = size
     self.number = number
@@ -544,9 +520,9 @@ public struct PageInfo: Equatable {
 
 extension PageInfo {
   /// The default page size
-  public static let DEFAULT_SIZE: UInt = 25
+  public static let defaultSize: UInt = 25
   /// The default page number.
-  public static let DEFAULT_NUMBER: UInt = 1
+  public static let defaultNumber: UInt = 1
 }
 
 /// A builder class for constructing ``UMLSConceptDefinitionParameters`` instance.
@@ -595,8 +571,8 @@ public class UMLSConceptDefinitionParametersBuilder {
 
   /// Sets the pagination details for retrieving concept relations.
   ///
-  /// If size property is 0 then function sets `PageInfo.DEFAULT_SIZE`.
-  /// If number property is 0 then function sets `PageInfo.DEFAULT_NUMBER`.
+  /// If size property is 0 then function sets `PageInfo.defaultSize`.
+  /// If number property is 0 then function sets `PageInfo.defaultNumber`.
   ///
   /// - Parameter pageInfo: The ``PageInfo`` object containing pagination details.
   /// - Returns: The builder instance for method chaining.
@@ -759,15 +735,15 @@ public class UMLSConceptRelationParametersBuilder {
 
   /// Sets the pagination details for retrieving concept relations.
   ///
-  /// If size property is 0 then function sets `PageInfo.DEFAULT_SIZE`.
-  /// If number property is 0 then function sets `PageInfo.DEFAULT_NUMBER`.
+  /// If size property is 0 then function sets `PageInfo.defaultSize`.
+  /// If number property is 0 then function sets `PageInfo.defaultNumber`.
   ///
   /// - Parameter pageInfo: The ``PageInfo`` object containing pagination details.
   /// - Returns: The builder instance for method chaining.
   public func setPageInfo(_ pageInfo: PageInfo) -> Self {
     self.page = .init(
-      size: pageInfo.size == 0 ? PageInfo.DEFAULT_SIZE : pageInfo.size,
-      number: pageInfo.number == 0 ? PageInfo.DEFAULT_NUMBER : pageInfo.number
+      size: pageInfo.size == 0 ? PageInfo.defaultSize : pageInfo.size,
+      number: pageInfo.number == 0 ? PageInfo.defaultNumber : pageInfo.number
     )
     return self
   }
@@ -902,8 +878,8 @@ public class UMLSConceptAtomParametersBuilder {
 
   /// Sets the pagination details for retrieving concept relations.
   ///
-  /// If size property is 0 then function sets `PageInfo.DEFAULT_SIZE`.
-  /// If number property is 0 then function sets `PageInfo.DEFAULT_NUMBER`.
+  /// If size property is 0 then function sets `PageInfo.defaultSize`.
+  /// If number property is 0 then function sets `PageInfo.defaultNumber`.
   ///
   /// - Parameter pageInfo: The ``PageInfo`` object containing pagination details.
   /// - Returns: The builder instance for method chaining.

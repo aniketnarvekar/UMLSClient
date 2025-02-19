@@ -64,8 +64,8 @@ final class ConceptDefinitionsTests: XCTestCase, UMLSTestUtility {
   }
 
   func conceptDefinitionParameter(
-    pageSize: UInt = PageInfo.DEFAULT_SIZE,
-    pageNumber: UInt = PageInfo.DEFAULT_NUMBER,
+    pageSize: UInt = PageInfo.defaultSize,
+    pageNumber: UInt = PageInfo.defaultNumber,
     sourceVocabularies: [UMLSSourceVocabulary] = []
   ) -> UMLSConceptDefinitionParameters {
     UMLSConceptDefinitionParametersBuilder(concept: .random())
