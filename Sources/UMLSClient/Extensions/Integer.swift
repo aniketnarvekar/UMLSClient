@@ -2,8 +2,8 @@
 
 extension Int {
 
-    var isNaturalNumber: Bool {
-        self >= 0
-    }
+  var isNaturalNumber: Bool {
+    self >= 0
+  }
 
 }
