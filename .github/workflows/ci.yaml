@@ -3,10 +3,10 @@ name: Swift Package CI
 on:
   push:
     branches:
-      - main
+      - feature/semantic_type
   pull_request:
     branches:
-      - main
+      - feature/semantic_type
 
 jobs:
   build-and-test:
@@ -31,6 +31,7 @@ jobs:
       - name: Run tests
         run: make test
         env:
+          UMLSCLIENT_UPCOMING_FEATURES: SemanticType
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
           DOPPLER_CONFIG: ${{ secrets.DOPPLER_CONFIG }}
           DOPPLER_ENVIRONMENT: ${{ secrets.DOPPLER_ENVIRONMENT }}
