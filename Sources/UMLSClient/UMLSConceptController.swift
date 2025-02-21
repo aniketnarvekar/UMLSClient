@@ -147,21 +147,6 @@ public struct UMLSPage<Element: Decodable & Sendable>: Decodable, Sendable {
 
 }
 
-/// UMLS semantic type Decodable model.
-public struct UMLSSemanticType: Decodable, Sendable {
-  public let name: String
-
-  enum CodingKeys: CodingKey {
-    case name
-  }
-
-  public init(from decoder: any Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.name = try container.decodeNonEmptyString(forKey: .name)
-  }
-
-}
-
 /// A concept information object.
 public struct UMLSConceptInfo: Decodable, Sendable {
 
@@ -205,6 +190,10 @@ public struct UMLSConceptInfo: Decodable, Sendable {
     case semanticTypes
   }
 
+  private enum SemanticTypeCodingKeys: String, CodingKey {
+    case name
+  }
+
   public init(from decoder: any Decoder) throws {
 
     let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -218,13 +207,17 @@ public struct UMLSConceptInfo: Decodable, Sendable {
     self.attributeCount = try container.decodeNaturalNumber(forKey: .attributeCount)
     self.relationCount = try container.decodeNaturalNumber(forKey: .relationCount)
     // SemanticTypes
-    let semanticTypes = try container.decode([UMLSSemanticType].self, forKey: .semanticTypes)
-    guard semanticTypes.count >= 1 else {
+    var semanticTypesContainer = try container.nestedUnkeyedContainer(forKey: .semanticTypes)
+    var semanticTypes: [UMLSSemanticType] = .init()
+    while !semanticTypesContainer.isAtEnd {
+      let styContainer = try semanticTypesContainer.nestedContainer(
+        keyedBy: SemanticTypeCodingKeys.self)
+      semanticTypes.append(try styContainer.decode(UMLSSemanticType.self, forKey: .name))
+    }
+    guard !semanticTypes.isEmpty else {
       throw DecodingError.dataCorruptedError(
-        forKey: CodingKeys.semanticTypes,
-        in: container,
-        debugDescription: "At least 1 semantic type should be present for a concept."
-      )
+        in: semanticTypesContainer,
+        debugDescription: "At least 1 semantic type should be present for a concept.")
     }
     self.semanticTypes = semanticTypes
   }

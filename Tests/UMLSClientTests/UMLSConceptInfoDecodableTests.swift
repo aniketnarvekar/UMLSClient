@@ -15,10 +15,10 @@ final class UMLSConceptInfoDecodableTests: XCTestCase {
     self.decoder = .init(decoder: decoder)
   }
 
-  func semanticTypeJSON(name: String = String.randomAlphaNumericString(of: 10)) -> Data {
+  func semanticTypeJSON(name: UMLSSemanticType = .random()) -> Data {
     """
     {
-        "name": "\(name)",
+      "name": "\(name.rawValue)",
     }
     """.data(using: .utf8)!
   }
@@ -30,8 +30,8 @@ final class UMLSConceptInfoDecodableTests: XCTestCase {
     majorRevisionDate: String = Date.randomDateString(),
     isSuppressible: Bool = .random(),
     status: String = ["R", "U"].randomElement()!,
-    semanticTypes: [String] = [
-      String.randomAlphaNumericString(of: 100)
+    semanticTypes: [UMLSSemanticType] = [
+      .random()
     ],
     atomCount: Int = .random(in: 0...Int.max),
     cvMemberCount: Int = .random(in: 0...Int.max),

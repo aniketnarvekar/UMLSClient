@@ -24,7 +24,6 @@ final class ConceptInfoTests: XCTestCase {
     XCTAssertGreaterThanOrEqual(conceptInfo.relationCount, 0)
     XCTAssertLessThan(conceptInfo.dateAdded, conceptInfo.majorRevisionDate)
     XCTAssertFalse(conceptInfo.semanticTypes.isEmpty)
-    XCTAssertTrue(!conceptInfo.semanticTypes.map({ !$0.name.isEmpty }).contains(false))
     XCTAssertFalse(conceptInfo.name.isEmpty)
   }
 
