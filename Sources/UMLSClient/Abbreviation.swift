@@ -2861,7 +2861,7 @@ public enum UMLSSemanticTypeRelationLabel: String, Decodable {
   case uses = "uses"
 }
 
-public enum UMLSSemanticType: String, Decodable, Sendable, CaseIterable {
+public enum UMLSSemanticType: String, Codable, Sendable, CaseIterable {
   case acquiredAbnormality = "Acquired Abnormality"
   case activity = "Activity"
   case ageGroup = "Age Group"
