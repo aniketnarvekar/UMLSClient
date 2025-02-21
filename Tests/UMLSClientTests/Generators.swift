@@ -193,4 +193,17 @@ extension UMLSSemanticType {
 
   }
 
+  extension UMLSSemanticTypeFlag {
+
+    static func random<G: RandomNumberGenerator>(using generator: inout G) -> Self {
+      .allCases.randomElement(using: &generator)!
+    }
+
+    static func random() -> Self {
+      var g = SystemRandomNumberGenerator()
+      return random(using: &g)
+    }
+
+  }
+
 #endif

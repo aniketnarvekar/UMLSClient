@@ -2796,7 +2796,7 @@ public enum UMLSSourceVocabulary: String, CaseIterable, Decodable, Sendable {
 
 #if SemanticType
 
-  public enum UMLSSemanticTypeFlag: String, Decodable {
+  public enum UMLSSemanticTypeFlag: String, Decodable, CaseIterable {
     /// Defined flag
     case defined = "D"
     /// Blocked flag
