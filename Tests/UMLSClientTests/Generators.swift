@@ -175,3 +175,22 @@ extension UMLSSemanticType {
   }
 
 }
+
+#if SemanticType
+
+  extension UMLSSemanticTypeRelationLabel {
+
+    static func random<G: RandomNumberGenerator>(using generator: inout G)
+      -> UMLSSemanticTypeRelationLabel
+    {
+      .allCases.randomElement(using: &generator)!
+    }
+
+    static func random() -> UMLSSemanticTypeRelationLabel {
+      var g = SystemRandomNumberGenerator()
+      return random(using: &g)
+    }
+
+  }
+
+#endif
