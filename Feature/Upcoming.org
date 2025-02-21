@@ -1,0 +1,73 @@
+#+title: Features
+
+* How to access features?
+
+To access the features compile project (whether compiling this or a project which uses UMLSClient as a dependency) with Command line flag ~-Xswiftc -D<flag>~.
+
+_Example_:
+To build project use follwing command in Project root directory.
+#+begin_src sh
+swift build -Xswiftc -D<flag>
+#+end_src
+
+* Features
+
+*Warning*: The upcoming feature API's are unstable and may change with different version.
+
+** Semantic Type
+
+To acess this feature use "feature/semantic_type" branch
+
+If package is compile with ~SemanticType~ flag (case-sensitive) to enable this feature.
+
+The feature provies [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSClient.swift::315][semanticTypeController()]] method from [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSClient.swift::248][UMLSClient]] class which returns an instance
+satisfies [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSSemanticTypeController.swift::133][UMLSSemanticTypeController]] specification. The controller has an instance method
+[[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSSemanticTypeController.swift::135][info(of:)]] async function which returns [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSConceptController.swift::120][UMLSPage]] with single element [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSSemanticTypeController.swift::83][UMLSSemanticTypeInfo]].
+
+The ~SemanticType~ flag enables following API's.
+
+Exmaple:
+See branch "feature/semantic_type" [[https://github.com/aniketnarvekar/UMLSCli][UMLSCli]] repository.
+
+- ~UMLSTUI~
+
+  A structure that conforms to [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSSemanticTypeController.swift::5][UMLSUIType]]. Used with [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSConceptController.swift::36][UMLSUI]] Generic parameter to create and validate
+  Semantic type unique identifier.
+
+- ~UMLSSemanticValue~
+
+  An enumaration to differentiate Semantic value. The possible value either [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/Abbreviation.swift::2864][UMLSSemanticType]] or
+  [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/Abbreviation.swift::2807][UMLSSemanticTypeRelationLabel]]. The purpose to remove code duplication and add backward
+  compatibility.
+
+- ~UMLSSemanticTypeRelationInfo~
+
+  A structure that encapsulates UMLS semantic type relation information.
+
+- ~UMLSSemanticTypeInverseRelationInfo~
+
+  A structure that encapsulates UMLS semantic type inverse relation information.
+
+- ~UMLSSemanticTypeInheritedRelationInfo~
+
+  A structure that encapsulates UMLS semantic type inherited relation information.
+
+- ~UMLSSemanticTypeInverseInheritedRelationInfo~
+
+  A structure that encapsulates UMLS semantic type inverse inherited information.
+
+- ~UMLSSemanticTypeGroupInfo~
+
+  A structure that encapsulates UMLS semantic type group information.
+
+- ~UMLSSemanticTypeInfo~
+
+  A structure that encapsulates UMLS semantic type information.
+
+- ~UMLSSemanticTypeController~
+
+  A controller that specifies actions for semantic type.
+
+- ~semanticTypeController()~
+
+  An instance method [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSClient.swift::248][UMLSClient]] which return an object that conforms to [[file:~/Language/Programming/Swift/Package/UMLSClient/Sources/UMLSClient/UMLSClient.swift::315][semanticTypeController()]].

@@ -42,3 +42,12 @@ NOTE: ~--parallel~ to run test in parallel. See ~swift help test~ for more infor
 See [[https://github.com/aniketnarvekar/UMLSCli][UMLSCli]] SwiftPM Command Line tool's [[https://github.com/aniketnarvekar/UMLSCli/blob/main/Package.swift][Package.swift]].
 *** In Xcode
 See [[https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app][Adding package dependencies to your app]]
+
+* Versiong
+
+** V0.2.0
+Replaces UMLSSemanticType struct with UMLSSemanticType enum.
+
+* Upcoming features
+
+See [[file:Feature/Upcoming.org][Upcoming.org]] for more information.
