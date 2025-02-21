@@ -92,12 +92,11 @@ class __UMLSSearchController: UMLSSearchController {
 
 }
 
+class __UMLSConceptController: UMLSRestAPIClient {
 
-class __UMLSConceptController {
-
-  private let apiKey: String
-  private let baseURL: URL
-  private let version: UMLSVersion
+  let apiKey: String
+  let baseURL: URL
+  let version: UMLSVersion
   var session: URLSession
   var decoder: JSONDecoder
 
@@ -120,7 +119,53 @@ extension __UMLSConceptController: UMLSConceptController {
     let message: String
   }
 
-  func data<T: Decodable>(_ type: T.Type, concept uri: UMLSConceptURI) async throws -> T {
+  func preferred(_ concept: UMLSUI<UMLSConcept>) async throws -> UMLSPage<UMLSAtomInfo> {
+    return try await get(
+      UMLSPage<UMLSAtomInfo>.self, concept: .preferred(for: concept, version: version))
+  }
+
+  func info(of ui: UMLSUI<UMLSConcept>) async throws -> UMLSPage<UMLSConceptInfo> {
+    return try await get(
+      UMLSPage<UMLSConceptInfo>.self, concept: .conceptInfo(for: ui, version: version))
+  }
+
+  func atoms(using parameters: any UMLSConceptAtomParameters) async throws -> UMLSPage<
+    [UMLSAtomInfo]
+  > {
+    return try await get(
+      UMLSPage<[UMLSAtomInfo]>.self, concept: .atoms(using: parameters, version: version))
+  }
+
+  func definitions(using parameters: any UMLSConceptDefinitionParameters) async throws -> UMLSPage<
+    [UMLSDefinition]
+  > {
+    return try await get(
+      UMLSPage<[UMLSDefinition]>.self, concept: .definitions(using: parameters, version: version))
+  }
+
+  func relations(using parameters: any UMLSConceptRelationParameters) async throws -> UMLSPage<
+    [UMLSRelationship]
+  > {
+    return try await get(
+      UMLSPage<[UMLSRelationship]>.self, concept: .relations(using: parameters, version: version))
+  }
+
+}
+
+protocol UMLSRestAPIClient {
+  var baseURL: URL { get }
+  var apiKey: String { get }
+  var session: URLSession { get }
+  var decoder: JSONDecoder { get }
+}
+
+struct DecoderError: Decodable {
+  let message: String
+}
+
+extension UMLSRestAPIClient {
+
+  func get<T: Decodable>(_ type: T.Type, concept uri: UMLSConceptURI) async throws -> T {
 
     var url: URL
     if #available(iOS 16.0, *) {
@@ -158,39 +203,46 @@ extension __UMLSConceptController: UMLSConceptController {
       throw UMLSError.unknown
     }
   }
-
-  func preferred(_ concept: UMLSUI<UMLSConcept>) async throws -> UMLSPage<UMLSAtomInfo> {
-    return try await data(
-      UMLSPage<UMLSAtomInfo>.self, concept: .preferred(for: concept, version: version))
-  }
-
-  func info(of ui: UMLSUI<UMLSConcept>) async throws -> UMLSPage<UMLSConceptInfo> {
-    return try await data(
-      UMLSPage<UMLSConceptInfo>.self, concept: .conceptInfo(for: ui, version: version))
-  }
-
-  func atoms(using parameters: any UMLSConceptAtomParameters) async throws -> UMLSPage<
-    [UMLSAtomInfo]
-  > {
-    return try await data(
-      UMLSPage<[UMLSAtomInfo]>.self, concept: .atoms(using: parameters, version: version))
-  }
-
-  func definitions(using parameters: any UMLSConceptDefinitionParameters) async throws -> UMLSPage<
-    [UMLSDefinition]
-  > {
-    return try await data(
-      UMLSPage<[UMLSDefinition]>.self, concept: .definitions(using: parameters, version: version))
-  }
-
-  func relations(using parameters: any UMLSConceptRelationParameters) async throws -> UMLSPage<
-    [UMLSRelationship]
-  > {
-    return try await data(
-      UMLSPage<[UMLSRelationship]>.self, concept: .relations(using: parameters, version: version))
-  }
-
 }
+
+#if SemanticType
+
+  private class __UMLSSemanticTypeController: UMLSRestAPIClient {
+
+    let apiKey: String
+    let baseURL: URL
+    let version: UMLSVersion
+    var session: URLSession
+    var decoder: JSONDecoder
+
+    public init(
+      apiKey: String,
+      baseURL: URL,
+      version: UMLSVersion,
+      session: URLSession = .shared,
+      decoder: JSONDecoder = .init()
+    ) {
+      self.apiKey = apiKey
+      self.baseURL = baseURL
+      self.version = version
+      self.session = session
+      self.decoder = decoder
+    }
+
+  }
+
+  extension __UMLSSemanticTypeController: UMLSSemanticTypeController {
+
+    func info(of ui: UMLSUI<UMLSTUI>) async throws -> UMLSPage<UMLSSemanticTypeInfo> {
+      try await get(
+        UMLSPage<UMLSSemanticTypeInfo>.self,
+        concept: .semanticType(for: ui, version: version)
+      )
+    }
+
+  }
+
+#endif
 
 /// UMLS client to query UMLS REST API server.
 public class UMLSClient {
@@ -221,6 +273,15 @@ public class UMLSClient {
     )
   }()
 
+  #if SemanticType
+
+    private lazy var semanticTypeCon: UMLSSemanticTypeController = { [unowned self] in
+      __UMLSSemanticTypeController(
+        apiKey: apiKey, baseURL: baseURL, version: version, session: session, decoder: decoder)
+    }()
+
+  #endif
+
   /// Create new client object
   /// - Parameters:
   ///   - baseURL: The base URL that will be used to send a request to. See [documentation](https://documentation.uts.nlm.nih.gov/rest/home.html)
@@ -248,5 +309,13 @@ public class UMLSClient {
   public func conceptController() -> UMLSConceptController {
     conceptCon
   }
+
+  #if SemanticType
+
+    public func semanticTypeController() -> UMLSSemanticTypeController {
+      semanticTypeCon
+    }
+
+  #endif
 
 }

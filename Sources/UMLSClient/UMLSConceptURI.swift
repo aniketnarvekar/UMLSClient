@@ -6,6 +6,9 @@ enum UMLSConceptURI {
   case relations(using: UMLSConceptRelationParameters, version: UMLSVersion)
   case atoms(using: UMLSConceptAtomParameters, version: UMLSVersion)
   case preferred(for: UMLSUI<UMLSConcept>, version: UMLSVersion)
+  #if SemanticType
+    case semanticType(for: UMLSUI<UMLSTUI>, version: UMLSVersion)
+  #endif
 }
 
 extension UMLSConceptURI {
@@ -159,6 +162,19 @@ extension UMLSConceptURI {
         component.path = path
         return component.url!
       }
+    #if SemanticType
+      case .semanticType(for: let ui, let version):
+        let path = "/semantic-network/\(version.description)/TUI/\(ui.description)"
+        if #available(iOS 16.0, *) {
+          return
+            baseURL
+            .appending(path: path)
+        } else {
+          var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
+          component.path = path
+          return component.url!
+        }
+    #endif
     }
   }
 
