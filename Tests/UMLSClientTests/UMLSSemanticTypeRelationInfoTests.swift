@@ -4,6 +4,8 @@ import XCTest
 
 @testable import UMLSClient
 
+#if SemanticType
+
 final class UMLSSemanticTypeRelationInfoTests: XCTestCase {
 
   func semanticTypeRelationInfoJSON(
@@ -160,3 +162,5 @@ final class UMLSSemanticTypeRelationInfoTests: XCTestCase {
   }
 
 }
+
+#endif
