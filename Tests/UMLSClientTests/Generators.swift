@@ -206,4 +206,44 @@ extension UMLSSemanticType {
 
   }
 
+  extension UMLSSemanticValue: RawRepresentable {
+    public var rawValue: String {
+      switch self {
+      case .semanticType(let value):
+        return value.rawValue
+      case .relation(let value):
+        return value.rawValue
+      }
+    }
+
+    public init?(rawValue: String) {
+      if let semanticType = UMLSSemanticType(rawValue: rawValue) {
+        self = .semanticType(semanticType)
+      } else if let relation = UMLSSemanticTypeRelationLabel(rawValue: rawValue) {
+        self = .relation(relation)
+      } else {
+        return nil
+      }
+    }
+
+  }
+
+  extension UMLSSemanticValue: Equatable {}
+
+  extension UMLSSemanticValue {
+
+    static func random<G: RandomNumberGenerator>(using generator: inout G) -> Self {
+      [
+        UMLSSemanticValue.semanticType(.random(using: &generator)),
+        UMLSSemanticValue.relation(.random(using: &generator)),
+      ].randomElement(using: &generator)!
+    }
+
+    static func random() -> Self {
+      var g = SystemRandomNumberGenerator()
+      return random(using: &g)
+    }
+
+  }
+
 #endif
