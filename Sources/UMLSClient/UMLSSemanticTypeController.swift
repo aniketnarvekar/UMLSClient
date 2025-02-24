@@ -20,10 +20,16 @@
   extension UMLSSemanticValue: Decodable {
     public init(from decoder: any Decoder) throws {
       let container = try decoder.singleValueContainer()
-      do {
-        self = .semanticType(try container.decode(UMLSSemanticType.self))
-      } catch {
-        self = .relation(try container.decode(UMLSSemanticTypeRelationLabel.self))
+      let string = try container.decode(String.self)
+      if let semanticType = UMLSSemanticType(rawValue: string) {
+        self = .semanticType(semanticType)
+      } else if let semanticTypeRelationlabel = UMLSSemanticTypeRelationLabel(rawValue: string) {
+        self = .relation(semanticTypeRelationlabel)
+      } else {
+        throw DecodingError.dataCorruptedError(
+          in: container,
+          debugDescription:
+            "Cannot initialize UMLSSemanticValue from invalid String value \(string)")
       }
     }
   }
