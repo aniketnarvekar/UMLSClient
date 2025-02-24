@@ -4,6 +4,8 @@ import XCTest
 
 @testable import UMLSClient
 
+#if SemanticType
+
 final class UMLSSemanticTypeInverseRelationInfoTests: XCTestCase {
 
   var jsonDecoder: JSONDecoder!
@@ -157,3 +159,5 @@ final class UMLSSemanticTypeInverseRelationInfoTests: XCTestCase {
   }
 
 }
+
+#endif
