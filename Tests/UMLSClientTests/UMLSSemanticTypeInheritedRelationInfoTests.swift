@@ -218,14 +218,14 @@ extension XCTDecodingErrorAssertion {
     try jsonDecoder.decode(Element.self, from: data)
   }
 
-  func __errorBlock(from data: Data, completion: (Error) -> Void) {
+  func errorBlock(from data: Data, completion: (Error) -> Void) {
     XCTAssertThrowsError(try toObject(from: data)) { error in
       completion(error)
     }
   }
 
   func dataCorrupted(from data: Data, completion: (DecodingError.Context) -> Void) {
-    __errorBlock(from: data) { error in
+    errorBlock(from: data) { error in
       guard case DecodingError.dataCorrupted(let context) = error else {
         return XCTFail("Unexpected error: \(error)")
       }
@@ -237,7 +237,7 @@ extension XCTDecodingErrorAssertion {
     from data: Data,
     completion: (CodingKey, DecodingError.Context) -> Void
   ) {
-    __errorBlock(from: data) { error in
+    errorBlock(from: data) { error in
       guard case DecodingError.keyNotFound(let key, let context) = error else {
         return XCTFail("Unexpected error: \(error)")
       }
@@ -246,7 +246,7 @@ extension XCTDecodingErrorAssertion {
   }
 
   func typeMismatch(from data: Data, completion: (Any, DecodingError.Context) -> Void) {
-    __errorBlock(from: data) { error in
+    errorBlock(from: data) { error in
       guard case DecodingError.typeMismatch(let any, let context) = error else {
         return XCTFail("Unexpected error: \(error)")
       }
@@ -255,7 +255,7 @@ extension XCTDecodingErrorAssertion {
   }
 
   func valueNotFound(from data: Data, completion: (Any.Type, DecodingError.Context) -> Void) {
-    __errorBlock(from: data) { error in
+    errorBlock(from: data) { error in
       guard case DecodingError.valueNotFound(let type, let context) = error else {
         return XCTFail("Unexpected error: \(error)")
       }
