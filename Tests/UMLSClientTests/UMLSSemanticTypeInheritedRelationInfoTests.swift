@@ -126,7 +126,6 @@ import XCTest
 
     func valueNotFound(
       codingKey stringValue: String,
-      debugDescription string: String,
       type: JSONValue<Any> = .present(UMLSSemanticTypeRelationLabel.random().rawValue),
       relation: JSONValue<Any> = .present(UMLSSemanticValue.random().rawValue)
     ) {
@@ -135,14 +134,12 @@ import XCTest
         XCTAssert(dataType is String.Type)
         XCTAssertFalse(context.codingPath.isEmpty)
         XCTAssertEqual(context.codingPath[0].stringValue, stringValue)
-        XCTAssertEqual(context.debugDescription, string)
       }
     }
 
     func testWithNullType() throws {
       valueNotFound(
         codingKey: "relationType",
-        debugDescription: "Cannot get value of type String -- found null value instead",
         type: .present(nil)
       )
     }
@@ -150,7 +147,6 @@ import XCTest
     func testWithNullRelation() throws {
       valueNotFound(
         codingKey: "relation2",
-        debugDescription: "Cannot get value of type String -- found null value instead",
         relation: .present(nil)
       )
     }

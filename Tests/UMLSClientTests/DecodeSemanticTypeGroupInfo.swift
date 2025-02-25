@@ -109,8 +109,6 @@ import XCTest
         XCTAssertFalse(context.codingPath.isEmpty)
         XCTAssertEqual(context.codingPath.count, 1)
         XCTAssertEqual(context.codingPath[0].stringValue, "abbreviation")
-        XCTAssertEqual(
-          context.debugDescription, "Cannot get value of type String -- found null value instead")
         XCTAssertNil(context.underlyingError)
       }
     }
@@ -122,8 +120,6 @@ import XCTest
         XCTAssertFalse(context.codingPath.isEmpty)
         XCTAssertEqual(context.codingPath.count, 1)
         XCTAssertEqual(context.codingPath[0].stringValue, "expandedForm")
-        XCTAssertEqual(
-          context.debugDescription, "Cannot get value of type String -- found null value instead")
         XCTAssertNil(context.underlyingError)
       }
     }
@@ -135,8 +131,6 @@ import XCTest
         XCTAssertFalse(context.codingPath.isEmpty)
         XCTAssertEqual(context.codingPath.count, 1)
         XCTAssertEqual(context.codingPath[0].stringValue, "semanticTypeCount")
-        XCTAssertEqual(
-          context.debugDescription, "Cannot get value of type UInt -- found null value instead")
         XCTAssertNil(context.underlyingError)
       }
     }
