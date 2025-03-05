@@ -21,11 +21,11 @@ import XCTest
       type: JSONValue<Any> = .present(UMLSSemanticTypeRelationLabel.random().rawValue),
       relation: JSONValue<Any> = .present(UMLSSemanticValue.random().rawValue)
     ) -> Data {
-      let dict = [
-        "relationType": type,
-        "relation2": relation,
-      ]
-      return toJSON(dictionary: dict)
+      let dict = JSONSerializationDictionary.semanticTypeInheritedRelationInfo(
+        type: type,
+        relation: relation
+      )
+      return try! JSONSerialization.data(withJSONObject: dict)
     }
 
     func semanticTypeInheritedRelationInfo(
@@ -197,7 +197,7 @@ func toJSON(dictionary: [String: JSONValue<Any>]) -> Data {
       dict[key] = value != nil ? value! : NSNull()
     }
   }
-  return try! JSONSerialization.data(withJSONObject: dict)
+  return try! JSONSerialization.data(withJSONObject: dict, options: [.prettyPrinted, .sortedKeys])
 }
 
 protocol XCTDecodingErrorAssertion {

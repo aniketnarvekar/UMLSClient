@@ -147,9 +147,9 @@
 
     public init(from decoder: any Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)
-      self.abbreviation = try container.decode(String.self, forKey: .abbreviation)
+      self.abbreviation = try container.decodeNonEmptyString(forKey: .abbreviation)
       self.ui = try container.decode(UMLSUI<UMLSTUI>.self, forKey: .ui)
-      self.definition = try container.decode(String.self, forKey: .definition)
+      self.definition = try container.decodeNonEmptyString(forKey: .definition)
       let note = try container.decode(String.self, forKey: .usageNote)
       self.usageNote = !["", .none].contains(note) ? note : nil
       self.name = try container.decode(UMLSSemanticValue.self, forKey: .name)
@@ -161,7 +161,7 @@
       self.inverseInheritedRelations = try container.decode(
         [UMLSSemanticTypeInverseInheritedRelationInfo].self, forKey: .inverseInheritedRelations)
       self.count = try container.decode(UInt.self, forKey: .count)
-      self.group = try container.decode(UMLSSemanticTypeGroupInfo.self, forKey: .group)
+      self.group = try container.decodeIfPresent(UMLSSemanticTypeGroupInfo.self, forKey: .group)
     }
 
   }

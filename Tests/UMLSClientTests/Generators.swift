@@ -246,4 +246,19 @@ extension UMLSSemanticType {
 
   }
 
+  // MARK: - UMLSUI<UMLSTUI>
+
+  extension UMLSUI where U == UMLSTUI {
+
+    static func random<G: RandomNumberGenerator>(using generator: inout G) -> Self {
+      try! .init(string: "T\(Int.random(in: 100..<1000, using: &generator))")
+    }
+
+    static func random() -> Self {
+      var g = SystemRandomNumberGenerator()
+      return random(using: &g)
+    }
+
+  }
+
 #endif

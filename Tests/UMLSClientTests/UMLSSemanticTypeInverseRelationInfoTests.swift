@@ -19,16 +19,11 @@ import XCTest
       relation: String? = UMLSSemanticValue.random().rawValue,
       flag: String? = UMLSSemanticTypeFlag.random().rawValue
     ) -> Data {
-      var dict: [String: String] = .init()
-      if let type = type {
-        dict["type"] = type
-      }
-      if let relation = relation {
-        dict["inverseRelation"] = relation
-      }
-      if let flag = flag {
-        dict["flag"] = flag
-      }
+      let dict = JSONSerializationDictionary.semanticTypeInverseRelationInfo(
+        type: type != nil ? .present(type) : .absent,
+        relation: relation != nil ? .present(relation) : .absent,
+        flag: flag != nil ? .present(flag) : .absent
+      )
       return try! JSONSerialization.data(withJSONObject: dict)
     }
 

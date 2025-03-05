@@ -24,10 +24,11 @@ import XCTest
       ),
       relation: JSONValue<Any> = .present(UMLSSemanticValue.random().rawValue)
     ) -> Data {
-      toJSON(dictionary: [
-        "relationType": type,
-        "relation1": relation,
-      ])
+      let dict = JSONSerializationDictionary.semanticTypeInverseInheritedRelationInfo(
+        type: type,
+        relation: relation
+      )
+      return try! JSONSerialization.data(withJSONObject: dict)
     }
 
     func semanticTypeInverseInheritedRelationInfo(
