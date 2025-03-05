@@ -4,17 +4,22 @@
     A Swift REST API client to query [UMLS REST API](https://documentation.uts.nlm.nih.gov/rest/home.html).
 
 * Testing
-
 ** Requirements
-
 *** Environment Variables
 For testing the package requires following environment arguments:
-   | Variable               | Type   | Description                                    |
-   |------------------------+--------+------------------------------------------------|
-   | UMLS_HOST              | URL    | The base URL                                   |
-   | UMLS_API_KEY           | String | The UMLS authentication key                    |
-   | UMLS_PAGE_CONTENT_SIZE | Int    | Max number of size the mock server can handler |
-   | UMLS_VERSION           | String | The UMLS version                               |
+   | Variable                     | Type   | Description                                                                                     |
+   |------------------------------+--------+-------------------------------------------------------------------------------------------------|
+   | UMLS_HOST                    | URL    | The base URL                                                                                    |
+   | UMLS_API_KEY                 | String | The UMLS authentication key                                                                     |
+   | UMLS_PAGE_CONTENT_SIZE       | Int    | Max number of size the mock server can handler                                                  |
+   | UMLS_VERSION                 | String | The UMLS version                                                                                |
+   | UMLSCLIENT_UPCOMING_FEATURES | String | The comma separated feature flags for swift compiler. Keep empty if no flags are needed.        |
+   | XCTEST_FILTER                | String | The : separated test methods. If using one don't using : at start or end of the value.          |
+   |                              |        | The value should be formatted as <test-target>.<test-case> or <test-target>.<test-case>/<test>. |
+   |                              |        | The value is not only used for testing but also for debugging test cases.                       |
+   |                              |        | If value is empty test/debug all test cases.                                                    |
+   | SWIFT_SOURCE_FILES           | String | The comma separated relative paths to the files.                                                |
+   |                              |        | to generate code coverage report and also to show file level code coverage.                     |
 
 *** Cli Commands
 
@@ -35,13 +40,70 @@ swift test --parallel
 NOTE: ~--parallel~ to run test in parallel. See ~swift help test~ for more information.
 
 * Usage
-
 ** Add package dependency
-
 *** In swiftPM
 See [[https://github.com/aniketnarvekar/UMLSCli][UMLSCli]] SwiftPM Command Line tool's [[https://github.com/aniketnarvekar/UMLSCli/blob/main/Package.swift][Package.swift]].
 *** In Xcode
 See [[https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app][Adding package dependencies to your app]]
+
+** Makefile
+*** Targets
+**** build
+
+Build a project as well as tests. The target supports compiler flags from
+enviroment variable 'UMLSCLIENT_UPCOMING_FEATURES'.
+
+**** test
+
+Test the package and create code coverage report.
+
+The target supports 'UMLSCLIENT_UPCOMING_FEATURES' and 'XCTEST_FILTER'
+environment variables. The 'UMLSCLIENT_UPCOMING_FEATURES' variable used to add
+swift compiler flags an 'XCTEST_FILTER' use to filter the tests. If not supplied
+it runs all the tests.
+
+**** tests
+
+Return list of tests.
+
+The target supports 'UMLSCLIENT_UPCOMING_FEATURES' environment variable. The
+variable allows adding swift compiler flags.
+
+**** format
+
+Format the project files in place. On failure print the format error file with line.
+
+Warning: The target mutates the files. Make sure commit the changes before performing the target.
+
+**** lint
+
+Find linting issues. On failure print the line of the file.
+
+**** lldb
+
+Start a lldb session for by loading test suite.
+
+The target using 'XCTEST_FILTER' enviroment variable. it allows creating debug
+session for specific test method or test case. If not specified it create debug
+session for all test cases.
+
+**** report
+
+Print code coverage report.
+
+The target uses 'SWIFT_SOURCE_FILES' environment variable. specific source files
+to filter code coverage report. The target by default ignores Tests and .build
+folder.
+
+**** show
+
+Print code coverage report of the files in the browser.
+
+The target uses 'SWIFT_SOURCE_FILES' environment variable. If specified the
+target generate only html report for the specified files. If not spcified
+generate report for all source files. The target by default ignores Tests and
+.build folder.
+
 
 * Versiong
 

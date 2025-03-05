@@ -1,14 +1,25 @@
-# Convert comma-separated UMLSCLIENT_UPCOMING_FEATURES into space-separated flags
-SWIFT_FLAGS = $(foreach flag, $(subst ,, $(UMLSCLIENT_UPCOMING_FEATURES)), -Xswiftc -D$(flag))
+.PHONY: tests
 
 build:
-	swift build $(SWIFT_FLAGS)
+	@doppler run -- make -f Makefile.ac build
 
 test:
-	doppler run -- swift test $(SWIFT_FLAGS)
+	@doppler run -- make -f Makefile.ac test
+
+tests:
+	@doppler run -- make -f Makefile.ac tests
 
 format:
-	swift format -i -p -r --color-diagnostics --follow-symlinks .
+	@make -f Makefile.ac format
 
 lint:
-	swift format lint -r -p -s --color-diagnostics --follow-symlinks .
+	@make -f Makefile.ac lint
+
+lldb:
+	@doppler run -- make -f Makefile.ac lldb
+
+report:
+	@doppler run -- make -f Makefile.cov report
+
+show:
+	@doppler run -- make -f Makefile.cov show

@@ -1,0 +1,40 @@
+SWIFT_FLAGS = $(foreach flag, $(subst ,, $(UMLSCLIENT_UPCOMING_FEATURES)), -Xswiftc -D$(flag))
+LLDB_DEBUG_TEST_FLAGS := $(if $(XCTEST_FILTER),-XCTest $(XCTEST_FILTER),)
+TEST_BUNDLE := $(shell swift build --show-bin-path)/UMLSClientPackageTests.xctest
+XCTEST_EXEC := $(shell xcrun --find xctest)
+TEST_FILTER_FLAG := $(foreach test,$(subst :, ,$(XCTEST_FILTER)),--filter $(test))
+# Use UMLSCLIENT_UPCOMING_FEATURES environment variable to specify comma
+# separated swift compiler flags. The enviroment variable is supported by build
+# and test target.
+#
+# Use XCTEST_FILTER environment variable to specify comma separated tests. The
+# tests should satisfiles following Format: <test-target>.<test-case> or
+# <test-target>.<test-case>/<test>. If not specified the target will create lldb
+# session for all the tests. The environment variable is supported by lldb
+# target. NOTE: lldb target does not build the project or tests. For the use build target
+
+.PHONY: tests
+
+build:
+	@echo "=> Building..."
+	@swift build -q --build-tests $(SWIFT_FLAGS)
+
+test:
+	@echo "=> Testing..."
+	@swift test --quiet --parallel --enable-code-coverage $(SWIFT_FLAGS) $(TEST_FILTER_FLAG)
+
+tests:
+	@echo "=> Listing test methods."
+	@swift test list $(SWIFT_FLAGS)
+
+format:
+	@echo "=> Formatting..."
+	@swift format -i -p -r --color-diagnostics --follow-symlinks .
+
+lint:
+	@echo "=> Find linting issues..."
+	@swift format lint -r -p -s --color-diagnostics --follow-symlinks .
+
+lldb:
+	@echo "=> Starting LLDB."
+	@lldb -Q -- $(XCTEST_EXEC) $(LLDB_DEBUG_TEST_FLAGS) $(TEST_BUNDLE)
