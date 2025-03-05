@@ -1,0 +1,41 @@
+CODECOV_PATH := $(shell swift test --show-codecov-path | xargs dirname)
+PROF_DATA := $(CODECOV_PATH)/default.profdata
+TEST_BINARY := $(shell swift build --show-bin-path)/UMLSClientPackageTests.xctest/Contents/MacOS/UMLSClientPackageTests
+SWIFT_SOURCE_FILES ?= $(shell echo "$$SWIFT_SOURCE_FILES")
+ABSOLUTE_PATHS := $(shell IFS=',' read -ra PATHS <<< "$$SWIFT_SOURCE_FILES"; \
+                    for path in "$${PATHS[@]}"; do \
+                        echo "$$(realpath "$$path")"; \
+                    done)
+
+# The SWIFT_SOURCE_FILES environment
+# variable value is comma seperated
+# relative paths to the swift files
+# which you want code coverage of.
+# If not specified the targets will
+# create code coverage report all
+# the swift files. The targets will
+# ignore Tests and .build directory.
+# In case of a issue perform target
+# build, test from Makefile first.
+
+report:
+	@echo "=> Generating code coverage report."
+	@xcrun --run \
+	llvm-cov report \
+	--instr-profile=$(PROF_DATA) \
+	--color \
+	--ignore-filename-regex="Tests|.build" \
+	$(TEST_BINARY) $(ABSOLUTE_PATHS)
+
+show:
+	@echo "=> Generating file report."
+	@xcrun --run \
+	llvm-cov show \
+	--instr-profile=$(PROF_DATA) \
+	--color \
+	--use-color=1 \
+	--ignore-filename-regex="Tests|.build" \
+	--format=html \
+	$(TEST_BINARY) $(ABSOLUTE_PATHS) > \
+	$(CODECOV_PATH)/data.html
+	@open $(CODECOV_PATH)/data.html
