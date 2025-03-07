@@ -1,0 +1,15 @@
+#+title: Features
+
+* How to access features?
+
+To access the features compile project (whether compiling this or a project which uses UMLSClient as a dependency) with Command line flag ~-Xswiftc -D<flag>~.
+
+_Example_:
+To build project use follwing command in Project root directory.
+#+begin_src sh
+swift build -Xswiftc -D<flag>
+#+end_src
+
+* Features
+
+*Warning*: The upcoming feature API's are unstable and may change with different version.

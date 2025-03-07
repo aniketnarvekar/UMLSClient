@@ -92,175 +92,11 @@ class __UMLSSearchController: UMLSSearchController {
 
 }
 
-enum UMLSConceptURI {
-  case conceptInfo(for: UMLSUI<UMLSConcept>, version: UMLSVersion)
-  case definitions(using: UMLSConceptDefinitionParameters, version: UMLSVersion)
-  case relations(using: UMLSConceptRelationParameters, version: UMLSVersion)
-  case atoms(using: UMLSConceptAtomParameters, version: UMLSVersion)
-  case preferred(for: UMLSUI<UMLSConcept>, version: UMLSVersion)
-}
+class __UMLSConceptController: UMLSRestAPIClient {
 
-extension UMLSConceptURI {
-
-  func url(for baseURL: URL) -> URL {
-    switch self {
-    case .conceptInfo(let concept, let version):
-      let path = "/content/\(version.description)/CUI/\(concept.description)"
-      if #available(iOS 16.0, *) {
-        return
-          baseURL
-          .appending(
-            path: path
-          )
-      } else {
-        return URL(string: path, relativeTo: baseURL)!
-      }
-    case .definitions(let parameter, let version):
-      var queryItems: [URLQueryItem] = [
-        .init(name: "pageSize", value: parameter.page.size.description),
-        .init(name: "pageNumber", value: parameter.page.number.description),
-      ]
-      if !parameter.sourceVocabularies.isEmpty {
-        queryItems
-          .append(
-            .init(
-              name: "sabs",
-              value: parameter.sourceVocabularies
-                .map({ $0.rawValue })
-                .joined(separator: ",")
-            )
-          )
-      }
-      let path = "/content/\(version.description)/CUI/\(parameter.concept.description)/definitions"
-
-      if #available(iOS 16.0, *) {
-        return
-          baseURL
-          .appending(path: path)
-          .appending(queryItems: queryItems)
-      } else {
-        var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
-        component.path += path
-        component.queryItems = queryItems
-        return component.url!
-      }
-    case .relations(let parameters, let version):
-      var queryItems: [URLQueryItem] = [
-        .init(name: "includeObsolete", value: parameters.includeObsolete.description),
-        .init(name: "includeSuppressible", value: parameters.includeSuppressible.description),
-        .init(name: "pageNumber", value: parameters.page.number.description),
-        .init(name: "pageSize", value: parameters.page.size.description),
-      ]
-
-      if !parameters.relationLabels.isEmpty {
-        queryItems.append(
-          .init(
-            name: "includeRelationLabels",
-            value: parameters.relationLabels
-              .map({ $0.rawValue })
-              .joined(separator: ",")))
-      }
-
-      if !parameters.additionalRelationLabels.isEmpty {
-        queryItems.append(
-          .init(
-            name: "includeAdditionalRelationLabels",
-            value: parameters.additionalRelationLabels
-              .map({ $0.rawValue })
-              .joined(separator: ",")))
-      }
-
-      if !parameters.sourceVocabularies.isEmpty {
-        queryItems
-          .append(
-            .init(
-              name: "sabs",
-              value: parameters.sourceVocabularies
-                .map({ $0.rawValue })
-                .joined(separator: ",")
-            )
-          )
-      }
-
-      let path = "/content/\(version.description)/CUI/\(parameters.concept.description)/relations"
-      if #available(iOS 16.0, *) {
-        return
-          baseURL
-          .appending(path: path)
-          .appending(queryItems: queryItems)
-      } else {
-        var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
-        component.path += path
-        component.queryItems = queryItems
-        return component.url!
-      }
-    case .atoms(let parameters, let version):
-      var queryItems: [URLQueryItem] = [
-        .init(name: "includeObsolete", value: parameters.includeObsolete.description),
-        .init(name: "includeSuppressible", value: parameters.includeSuppressible.description),
-        .init(name: "pageNumber", value: parameters.page.number.description),
-        .init(name: "pageSize", value: parameters.page.size.description),
-      ]
-
-      if !parameters.sourceVocabularies.isEmpty {
-        queryItems
-          .append(
-            .init(
-              name: "sabs",
-              value: parameters.sourceVocabularies
-                .map({ $0.rawValue })
-                .joined(separator: ",")
-            )
-          )
-      }
-
-      if !parameters.termTypes.isEmpty {
-        queryItems.append(
-          .init(
-            name: "ttys",
-            value: parameters.termTypes
-              .map({ $0.rawValue })
-              .joined(separator: ",")
-          )
-        )
-      }
-
-      if let lang = parameters.language {
-        queryItems.append(.init(name: "language", value: lang.rawValue))
-      }
-      let path = "/content/\(version.description)/CUI/\(parameters.concept.description)/atoms"
-      if #available(iOS 16.0, *) {
-        return
-          baseURL
-          .appending(path: path)
-          .appending(queryItems: queryItems)
-      } else {
-        var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
-        component.path += path
-        component.queryItems = queryItems
-        return component.url!
-      }
-    case .preferred(let concept, let version):
-      let path = "/content/\(version.description)/CUI/\(concept.description)/atoms/preferred"
-      if #available(iOS 16.0, *) {
-        return
-          baseURL
-          .appending(path: path)
-      } else {
-        var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
-        component.path = path
-        return component.url!
-      }
-    }
-  }
-
-}
-
-class __UMLSConceptController {
-
-  private let apiKey: String
-  private let baseURL: URL
-  private let version: UMLSVersion
+  let apiKey: String
+  let baseURL: URL
+  let version: UMLSVersion
   var session: URLSession
   var decoder: JSONDecoder
 
@@ -283,7 +119,53 @@ extension __UMLSConceptController: UMLSConceptController {
     let message: String
   }
 
-  func data<T: Decodable>(_ type: T.Type, concept uri: UMLSConceptURI) async throws -> T {
+  func preferred(_ concept: UMLSUI<UMLSConcept>) async throws -> UMLSPage<UMLSAtomInfo> {
+    return try await get(
+      UMLSPage<UMLSAtomInfo>.self, concept: .preferred(for: concept, version: version))
+  }
+
+  func info(of ui: UMLSUI<UMLSConcept>) async throws -> UMLSPage<UMLSConceptInfo> {
+    return try await get(
+      UMLSPage<UMLSConceptInfo>.self, concept: .conceptInfo(for: ui, version: version))
+  }
+
+  func atoms(using parameters: any UMLSConceptAtomParameters) async throws -> UMLSPage<
+    [UMLSAtomInfo]
+  > {
+    return try await get(
+      UMLSPage<[UMLSAtomInfo]>.self, concept: .atoms(using: parameters, version: version))
+  }
+
+  func definitions(using parameters: any UMLSConceptDefinitionParameters) async throws -> UMLSPage<
+    [UMLSDefinition]
+  > {
+    return try await get(
+      UMLSPage<[UMLSDefinition]>.self, concept: .definitions(using: parameters, version: version))
+  }
+
+  func relations(using parameters: any UMLSConceptRelationParameters) async throws -> UMLSPage<
+    [UMLSRelationship]
+  > {
+    return try await get(
+      UMLSPage<[UMLSRelationship]>.self, concept: .relations(using: parameters, version: version))
+  }
+
+}
+
+protocol UMLSRestAPIClient {
+  var baseURL: URL { get }
+  var apiKey: String { get }
+  var session: URLSession { get }
+  var decoder: JSONDecoder { get }
+}
+
+struct DecoderError: Decodable {
+  let message: String
+}
+
+extension UMLSRestAPIClient {
+
+  func get<T: Decodable>(_ type: T.Type, concept uri: UMLSConceptURI) async throws -> T {
 
     var url: URL
     if #available(iOS 16.0, *) {
@@ -321,36 +203,39 @@ extension __UMLSConceptController: UMLSConceptController {
       throw UMLSError.unknown
     }
   }
+}
 
-  func preferred(_ concept: UMLSUI<UMLSConcept>) async throws -> UMLSPage<UMLSAtomInfo> {
-    return try await data(
-      UMLSPage<UMLSAtomInfo>.self, concept: .preferred(for: concept, version: version))
+private class __UMLSSemanticTypeController: UMLSRestAPIClient {
+
+  let apiKey: String
+  let baseURL: URL
+  let version: UMLSVersion
+  var session: URLSession
+  var decoder: JSONDecoder
+
+  public init(
+    apiKey: String,
+    baseURL: URL,
+    version: UMLSVersion,
+    session: URLSession = .shared,
+    decoder: JSONDecoder = .init()
+  ) {
+    self.apiKey = apiKey
+    self.baseURL = baseURL
+    self.version = version
+    self.session = session
+    self.decoder = decoder
   }
 
-  func info(of ui: UMLSUI<UMLSConcept>) async throws -> UMLSPage<UMLSConceptInfo> {
-    return try await data(
-      UMLSPage<UMLSConceptInfo>.self, concept: .conceptInfo(for: ui, version: version))
-  }
+}
 
-  func atoms(using parameters: any UMLSConceptAtomParameters) async throws -> UMLSPage<
-    [UMLSAtomInfo]
-  > {
-    return try await data(
-      UMLSPage<[UMLSAtomInfo]>.self, concept: .atoms(using: parameters, version: version))
-  }
+extension __UMLSSemanticTypeController: UMLSSemanticTypeController {
 
-  func definitions(using parameters: any UMLSConceptDefinitionParameters) async throws -> UMLSPage<
-    [UMLSDefinition]
-  > {
-    return try await data(
-      UMLSPage<[UMLSDefinition]>.self, concept: .definitions(using: parameters, version: version))
-  }
-
-  func relations(using parameters: any UMLSConceptRelationParameters) async throws -> UMLSPage<
-    [UMLSRelationship]
-  > {
-    return try await data(
-      UMLSPage<[UMLSRelationship]>.self, concept: .relations(using: parameters, version: version))
+  func info(of ui: UMLSUI<UMLSTUI>) async throws -> UMLSPage<UMLSSemanticTypeInfo> {
+    try await get(
+      UMLSPage<UMLSSemanticTypeInfo>.self,
+      concept: .semanticType(for: ui, version: version)
+    )
   }
 
 }
@@ -384,6 +269,11 @@ public class UMLSClient {
     )
   }()
 
+  private lazy var semanticTypeCon: UMLSSemanticTypeController = { [unowned self] in
+    __UMLSSemanticTypeController(
+      apiKey: apiKey, baseURL: baseURL, version: version, session: session, decoder: decoder)
+  }()
+
   /// Create new client object
   /// - Parameters:
   ///   - baseURL: The base URL that will be used to send a request to. See [documentation](https://documentation.uts.nlm.nih.gov/rest/home.html)
@@ -410,6 +300,10 @@ public class UMLSClient {
   /// The concept controller object.
   public func conceptController() -> UMLSConceptController {
     conceptCon
+  }
+
+  public func semanticTypeController() -> UMLSSemanticTypeController {
+    semanticTypeCon
   }
 
 }

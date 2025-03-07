@@ -162,3 +162,99 @@ extension UMLSSourceVocabulary {
   }
 
 }
+
+extension UMLSSemanticType {
+
+  static func random<G: RandomNumberGenerator>(using generator: inout G) -> UMLSSemanticType {
+    .allCases.randomElement(using: &generator)!
+  }
+
+  static func random() -> UMLSSemanticType {
+    var g = SystemRandomNumberGenerator()
+    return random(using: &g)
+  }
+
+}
+
+extension UMLSSemanticTypeRelationLabel {
+
+  static func random<G: RandomNumberGenerator>(using generator: inout G)
+    -> UMLSSemanticTypeRelationLabel
+  {
+    .allCases.randomElement(using: &generator)!
+  }
+
+  static func random() -> UMLSSemanticTypeRelationLabel {
+    var g = SystemRandomNumberGenerator()
+    return random(using: &g)
+  }
+
+}
+
+extension UMLSSemanticTypeFlag {
+
+  static func random<G: RandomNumberGenerator>(using generator: inout G) -> Self {
+    .allCases.randomElement(using: &generator)!
+  }
+
+  static func random() -> Self {
+    var g = SystemRandomNumberGenerator()
+    return random(using: &g)
+  }
+
+}
+
+extension UMLSSemanticValue: RawRepresentable {
+  public var rawValue: String {
+    switch self {
+    case .semanticType(let value):
+      return value.rawValue
+    case .relation(let value):
+      return value.rawValue
+    }
+  }
+
+  public init?(rawValue: String) {
+    if let semanticType = UMLSSemanticType(rawValue: rawValue) {
+      self = .semanticType(semanticType)
+    } else if let relation = UMLSSemanticTypeRelationLabel(rawValue: rawValue) {
+      self = .relation(relation)
+    } else {
+      return nil
+    }
+  }
+
+}
+
+extension UMLSSemanticValue: Equatable {}
+
+extension UMLSSemanticValue {
+
+  static func random<G: RandomNumberGenerator>(using generator: inout G) -> Self {
+    [
+      UMLSSemanticValue.semanticType(.random(using: &generator)),
+      UMLSSemanticValue.relation(.random(using: &generator)),
+    ].randomElement(using: &generator)!
+  }
+
+  static func random() -> Self {
+    var g = SystemRandomNumberGenerator()
+    return random(using: &g)
+  }
+
+}
+
+// MARK: - UMLSUI<UMLSTUI>
+
+extension UMLSUI where U == UMLSTUI {
+
+  static func random<G: RandomNumberGenerator>(using generator: inout G) -> Self {
+    try! .init(string: "T\(Int.random(in: 100..<1000, using: &generator))")
+  }
+
+  static func random() -> Self {
+    var g = SystemRandomNumberGenerator()
+    return random(using: &g)
+  }
+
+}

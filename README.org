@@ -4,9 +4,7 @@
     A Swift REST API client to query [UMLS REST API](https://documentation.uts.nlm.nih.gov/rest/home.html).
 
 * Testing
-
 ** Requirements
-
 *** Environment Variables
 For testing the package requires following environment arguments:
    | Variable                     | Type   | Description                                                                                     |
@@ -42,17 +40,14 @@ swift test --parallel
 NOTE: ~--parallel~ to run test in parallel. See ~swift help test~ for more information.
 
 * Usage
-
 ** Add package dependency
-
 *** In swiftPM
 See [[https://github.com/aniketnarvekar/UMLSCli][UMLSCli]] SwiftPM Command Line tool's [[https://github.com/aniketnarvekar/UMLSCli/blob/main/Package.swift][Package.swift]].
 *** In Xcode
 See [[https://developer.apple.com/documentation/xcode/adding-package-dependencies-to-your-app][Adding package dependencies to your app]]
+
 ** Makefile
-
 *** Targets
-
 **** build
 
 Build a project as well as tests. The target supports compiler flags from
@@ -108,3 +103,13 @@ The target uses 'SWIFT_SOURCE_FILES' environment variable. If specified the
 target generate only html report for the specified files. If not spcified
 generate report for all source files. The target by default ignores Tests and
 .build folder.
+
+
+* Versiong
+
+** V0.2.0
+Replaces UMLSSemanticType struct with UMLSSemanticType enum.
+
+* Upcoming features
+
+See [[file:Feature/Upcoming.org][Upcoming.org]] for more information.
