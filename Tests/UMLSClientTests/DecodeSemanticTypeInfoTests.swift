@@ -9,9 +9,11 @@ final class DecodeSemanticTypeInfoTests: XCTestCase, XCTDecodingErrorAssertion {
   typealias Element = UMLSSemanticTypeInfo
 
   var jsonDecoder: JSONDecoder!
+  var jsonEncoder: JSONEncoder!
 
   override func setUp() {
     self.jsonDecoder = .init()
+    self.jsonEncoder = .init()
   }
 
   func semanticTypeInfo(

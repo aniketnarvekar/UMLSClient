@@ -324,7 +324,7 @@ public struct UMLSAtomInfo: Decodable, Sendable {
   /// The term type of the atom belongs to in respective source vocabulary.
   public let termType: UMLSTermType
   /// The human readable language the name is written on.
-  public let language: UMLSLanguage
+  public let language: UMLSLanguageAbbreviation
   /// The human readable name of the atom.
   public let name: String
 
@@ -347,7 +347,7 @@ public struct UMLSAtomInfo: Decodable, Sendable {
       try container
       .decode(UMLSSourceVocabulary.self, forKey: .sourceVocabulary)
     self.termType = try container.decode(UMLSTermType.self, forKey: .termType)
-    self.language = try container.decode(UMLSLanguage.self, forKey: .language)
+    self.language = try container.decode(UMLSLanguageAbbreviation.self, forKey: .language)
     self.name = try container.decodeNonEmptyString(forKey: .name)
   }
 
@@ -436,7 +436,7 @@ public protocol UMLSAtomParameters {
   /// The language of the atoms.
   ///
   /// If `nil`, atoms from all available languages will be included.
-  var language: UMLSLanguage? { get }
+  var language: UMLSLanguageAbbreviation? { get }
 
   /// A flag indicating whether obsolete atoms should be included in the response.
   ///
@@ -467,7 +467,7 @@ private struct __UMLSConceptAtomParameters: UMLSConceptAtomParameters {
   var concept: UMLSUI<UMLSConcept>
   var sourceVocabularies: [UMLSSourceVocabulary]
   var termTypes: [UMLSTermType]
-  var language: UMLSLanguage?
+  var language: UMLSLanguageAbbreviation?
   var includeObsolete: Bool
   var includeSuppressible: Bool
   var page: PageInfo
@@ -476,7 +476,7 @@ private struct __UMLSConceptAtomParameters: UMLSConceptAtomParameters {
     concept: UMLSUI<UMLSConcept>,
     sourceVocabularies: [UMLSSourceVocabulary],
     termTypes: [UMLSTermType],
-    lang: UMLSLanguage? = nil,
+    lang: UMLSLanguageAbbreviation? = nil,
     includeObsolete: Bool,
     includeSuppressible: Bool,
     page: PageInfo
@@ -764,7 +764,7 @@ public class UMLSConceptAtomParametersBuilder {
   private let concept: UMLSUI<UMLSConcept>
   private var sources: [UMLSSourceVocabulary] = .init()
   private var termTypes: [UMLSTermType] = .init()
-  private var lang: UMLSLanguage?
+  private var lang: UMLSLanguageAbbreviation?
   private var includeObsolete: Bool?
   private var includeSuppressible: Bool?
   private var page: PageInfo?
@@ -842,7 +842,7 @@ public class UMLSConceptAtomParametersBuilder {
   ///
   /// - Parameter language: The language for the atoms or nil.
   /// - Returns: The builder instance of method chaining.
-  public func setLanguage(_ language: UMLSLanguage?) -> Self {
+  public func setLanguage(_ language: UMLSLanguageAbbreviation?) -> Self {
     self.lang = language
     return self
   }

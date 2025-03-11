@@ -37,4 +37,8 @@ lint:
 
 lldb:
 	@echo "=> Starting LLDB."
-	@lldb -Q -- $(XCTEST_EXEC) $(LLDB_DEBUG_TEST_FLAGS) $(TEST_BUNDLE)
+	@lldb -s commands.lldb -Q -- $(XCTEST_EXEC) $(LLDB_DEBUG_TEST_FLAGS) $(TEST_BUNDLE)
+
+repl:
+	@echo "=> Starting swift project REPL"
+	@swift run --repl $(SWIFT_FLAGS)

@@ -1,5 +1,8 @@
 .PHONY: tests
 
+repl:
+	@doppler run -- make -f Makefile.ac repl
+
 build:
 	@doppler run -- make -f Makefile.ac build
 

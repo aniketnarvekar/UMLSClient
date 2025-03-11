@@ -1,7 +1,7 @@
 //  Abbreviation.swift
 
 /// UMLS supported Languages.
-public enum UMLSLanguage: String, Sendable {
+public enum UMLSLanguageAbbreviation: String, Sendable {
   /// Arabic
   case ara = "ARA"
   /// Basque
@@ -59,9 +59,9 @@ public enum UMLSLanguage: String, Sendable {
 
 }
 
-extension UMLSLanguage: CaseIterable {}
+extension UMLSLanguageAbbreviation: CaseIterable {}
 
-extension UMLSLanguage: Decodable {}
+extension UMLSLanguageAbbreviation: Codable {}
 
 /// The predefined term types in UMLS.
 public enum UMLSTermType: String, Sendable {
@@ -2990,3 +2990,38 @@ public enum UMLSSemanticType: String, Codable, Sendable, CaseIterable {
   case virus = "Virus"
   case vitamin = "Vitamin"
 }
+
+#if SourceVocabulary
+
+  /// The UMLS language name
+  public enum UMLSLanguageName: String, Codable, CaseIterable {
+    case arabic = "Arabic"
+    case basque = "Basque"
+    case chinese = "Chinese"
+    case czech = "Czech"
+    case danish = "Danish"
+    case dutch = "Dutch"
+    case english = "English"
+    case estonian = "Estonian"
+    case finnish = "Finnish"
+    case french = "French"
+    case german = "German"
+    case greek = "Greek"
+    case hebrew = "Hebrew"
+    case hungarian = "Hungarian"
+    case italian = "Italian"
+    case japanese = "Japanese"
+    case korean = "Korean"
+    case latvian = "Latvian"
+    case norwegian = "Norwegian"
+    case polish = "Polish"
+    case portuguese = "Portuguese"
+    case russian = "Russian"
+    case croatian = "Croatian"
+    case spanish = "Spanish"
+    case swedish = "Swedish"
+    case turkish = "Turkish"
+    case ukrainian = "Ukrainian"
+  }
+
+#endif

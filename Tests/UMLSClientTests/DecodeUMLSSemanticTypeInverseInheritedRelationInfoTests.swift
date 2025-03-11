@@ -11,9 +11,11 @@ final class DecodeUMLSSemanticTypeInverseInheritedRelationInfoTests: XCTestCase,
   typealias Element = UMLSSemanticTypeInverseInheritedRelationInfo
 
   var jsonDecoder: JSONDecoder!
+  var jsonEncoder: JSONEncoder!
 
   override func setUp() {
     jsonDecoder = .init()
+    jsonEncoder = .init()
   }
 
   func semanticTypeInverseInheritedRelationInfo(

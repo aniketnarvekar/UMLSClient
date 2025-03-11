@@ -10,9 +10,11 @@ final class UMLSSemanticTypeInheritedRelationInfoTests: XCTestCase, XCTDecodingE
   typealias Element = UMLSSemanticTypeInheritedRelationInfo
 
   var jsonDecoder: JSONDecoder!
+  var jsonEncoder: JSONEncoder!
 
   override func setUp() {
     self.jsonDecoder = .init()
+    self.jsonEncoder = .init()
   }
 
   func semanticTypeInheritedRelationInfo(
@@ -198,13 +200,14 @@ func toJSON(dictionary: [String: JSONValue<Any>]) -> Data {
 
 protocol XCTDecodingErrorAssertion {
 
-  associatedtype Element: Decodable
+  associatedtype Element
 
   var jsonDecoder: JSONDecoder! { get set }
+  var jsonEncoder: JSONEncoder! { get set }
 
 }
 
-extension XCTDecodingErrorAssertion {
+extension XCTDecodingErrorAssertion where Element: Decodable {
 
   func toObject(from data: Data) throws -> Element {
     try jsonDecoder.decode(Element.self, from: data)
@@ -253,6 +256,22 @@ extension XCTDecodingErrorAssertion {
       }
       completion(type, context)
     }
+  }
+
+}
+
+extension XCTDecodingErrorAssertion {
+
+  func toData<T: Encodable>(from object: T) throws -> Data {
+    try jsonEncoder.encode(object)
+  }
+
+}
+
+extension XCTDecodingErrorAssertion where Element: Encodable & CaseIterable {
+
+  func data() throws -> [Data] {
+    try Element.allCases.map { try toData(from: $0) }
   }
 
 }

@@ -110,4 +110,21 @@ enum JSONSerializationDictionary {
       "semanticTypeGroup": group,
     ])
   }
+
+  #if SourceVocabulary
+
+    static func languageInfo(
+      classType: JSONValue<Any> = .present(UMLSObject.language.rawValue),
+      abbreviation: JSONValue<Any> = .present(UMLSLanguageAbbreviation.random().rawValue),
+      name: JSONValue<Any> = .present(UMLSLanguageName.random().rawValue)
+    ) -> [String: Any] {
+      dictionary([
+        "classType": classType,
+        "abbreviation": abbreviation,
+        "expandedForm": name,
+      ])
+    }
+
+  #endif
+
 }

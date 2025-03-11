@@ -3,6 +3,27 @@
 import Foundation
 import UMLSClient
 
+protocol RandomGenerator {
+  static func random<G: RandomNumberGenerator>(using generator: inout G) -> Self
+}
+
+extension RandomGenerator {
+
+  static func random() -> Self {
+    var g = SystemRandomNumberGenerator()
+    return random(using: &g)
+  }
+
+}
+
+extension RandomGenerator where Self: CaseIterable {
+
+  static func random<G: RandomNumberGenerator>(using generator: inout G) -> Self {
+    .allCases.randomElement(using: &generator)!
+  }
+
+}
+
 extension UMLSTermType {
 
   static func random(using generator: inout RandomNumberGenerator) -> UMLSTermType {
@@ -16,18 +37,7 @@ extension UMLSTermType {
 
 }
 
-extension UMLSLanguage {
-
-  static func random(using generator: inout RandomNumberGenerator) -> UMLSLanguage {
-    UMLSLanguage.allCases.randomElement(using: &generator)!
-  }
-
-  static func random() -> UMLSLanguage {
-    var g: any RandomNumberGenerator = SystemRandomNumberGenerator()
-    return random(using: &g)
-  }
-
-}
+extension UMLSLanguageAbbreviation: RandomGenerator {}
 
 extension UMLSRelationLabel {
 
@@ -258,3 +268,9 @@ extension UMLSUI where U == UMLSTUI {
   }
 
 }
+
+#if SourceVocabulary
+
+  extension UMLSLanguageName: RandomGenerator {}
+
+#endif

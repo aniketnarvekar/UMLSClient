@@ -135,7 +135,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   }
 
   func testResponseFromSpecificLanguage() async throws {
-    let lang = UMLSLanguage.random()
+    let lang = UMLSLanguageAbbreviation.random()
     let params = UMLSConceptAtomParametersBuilder(concept: .random())
       .setLanguage(lang)
       .build()

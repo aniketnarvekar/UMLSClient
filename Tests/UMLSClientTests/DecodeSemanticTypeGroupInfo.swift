@@ -9,9 +9,11 @@ final class DecodeSemanticTypeGroupInfo: XCTestCase, XCTDecodingErrorAssertion {
   typealias Element = UMLSSemanticTypeGroupInfo
 
   var jsonDecoder: JSONDecoder!
+  var jsonEncoder: JSONEncoder!
 
   override func setUp() {
     self.jsonDecoder = .init()
+    self.jsonEncoder = .init()
   }
 
   func groupInfo(

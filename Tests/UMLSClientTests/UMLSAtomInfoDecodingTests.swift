@@ -17,7 +17,7 @@ final class UMLSAtomInfoDecodingTests: XCTestCase {
     isObsolete: String = .randomBoolString(),
     sourceVocabulary: UMLSSourceVocabulary = .random(),
     termType: String = UMLSTermType.random().rawValue,
-    language: String = UMLSLanguage.random().rawValue,
+    language: String = UMLSLanguageAbbreviation.random().rawValue,
     name: String = String.randomAlphaNumericString(of: 100)
   ) -> Data {
     """
@@ -39,7 +39,7 @@ final class UMLSAtomInfoDecodingTests: XCTestCase {
     let isObsolete = "true"
     let source = UMLSSourceVocabulary.random()
     let termType = UMLSTermType.random().rawValue
-    let lang = UMLSLanguage.random().rawValue
+    let lang = UMLSLanguageAbbreviation.random().rawValue
     let name = String.randomAlphaNumericString(of: 10)
     let jsonData = atomInfo(
       ui: ui,
