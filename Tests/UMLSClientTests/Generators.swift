@@ -94,6 +94,10 @@ extension String {
     return String(array)
   }
 
+  static func randomStringWithNone() -> String {
+    ["NONE", String.randomAlphaNumericString(of: 10)].randomElement()!
+  }
+
   static func randomNumericString(of size: UInt8) -> String {
     let array = (0...size).map({ _ in Character(.init(UInt8.numericCharacterCodes.randomElement()!))
     })

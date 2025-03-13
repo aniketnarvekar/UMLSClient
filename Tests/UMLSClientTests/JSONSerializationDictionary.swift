@@ -125,6 +125,24 @@ enum JSONSerializationDictionary {
       ])
     }
 
+    static func address(
+      address1: JSONValue<Any> = .present(String.randomStringWithNone()),
+      address2: JSONValue<Any> = .present(String.randomStringWithNone()),
+      city: JSONValue<Any> = .present(String.randomStringWithNone()),
+      stateOrProvince: JSONValue<Any> = .present(String.randomStringWithNone()),
+      country: JSONValue<Any> = .present(String.randomStringWithNone()),
+      zipCode: JSONValue<Any> = .present(String.randomStringWithNone())
+    ) -> [String: Any] {
+      dictionary([
+        "address1": address1,
+        "address2": address2,
+        "city": city,
+        "stateOrProvince": stateOrProvince,
+        "country": country,
+        "zipCode": zipCode,
+      ])
+    }
+
   #endif
 
 }

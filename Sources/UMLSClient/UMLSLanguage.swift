@@ -101,4 +101,71 @@ import Foundation
     }
   }
 
+  // MARK: - Address
+
+  // MARK: Implementation
+
+  /// A protocol that defines the essential components of a postal address.
+  public protocol UMLSAddress {
+    /// The primary address line, typically including the street name and number.
+    var address1: String? { get }
+
+    /// An optional secondary address line, such as an apartment or suite number.
+    var address2: String? { get }
+
+    /// The city or locality of the address.
+    var city: String? { get }
+
+    /// The state or province of the address.
+    var stateOrProvince: String? { get }
+
+    /// The country of the address.
+    var country: String? { get }
+
+    /// The postal or ZIP code of the address.
+    var zipCode: String? { get }
+  }
+
+  // MARK: Implementation
+
+  public struct UMLSPostalAddress: UMLSAddress, Decodable {
+    public var address1: String?
+    public var address2: String?
+    public var city: String?
+    public var stateOrProvince: String?
+    public var country: String?
+    public var zipCode: String?
+
+    private enum CodingKeys: CodingKey {
+      case address1
+      case address2
+      case city
+      case stateOrProvince
+      case country
+      case zipCode
+    }
+
+    private static func stringOrNil(
+      from container: KeyedDecodingContainer<CodingKeys>, forKey key: CodingKeys
+    ) throws -> String? {
+      let string = try container.decode(String.self, forKey: key).trimmingCharacters(
+        in: .whitespacesAndNewlines)
+      return ![.none, ""].contains(string) ? string : nil
+    }
+
+    public init(from decoder: any Decoder) throws {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+
+      self.address1 = try UMLSPostalAddress.stringOrNil(from: container, forKey: .address1)
+      self.address2 = try UMLSPostalAddress.stringOrNil(from: container, forKey: .address2)
+      self.city = try UMLSPostalAddress.stringOrNil(from: container, forKey: .city)
+      self.stateOrProvince = try UMLSPostalAddress.stringOrNil(
+        from: container, forKey: .stateOrProvince)
+      self.country = try UMLSPostalAddress.stringOrNil(from: container, forKey: .country)
+      self.zipCode = try UMLSPostalAddress.stringOrNil(from: container, forKey: .zipCode)
+
+    }
+
+  }
+
 #endif
