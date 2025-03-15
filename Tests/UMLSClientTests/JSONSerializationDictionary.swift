@@ -143,6 +143,44 @@ enum JSONSerializationDictionary {
       ])
     }
 
+    static func creatorContact(
+      classType: JSONValue<Any> = .present("ContactInformation"),
+      handle: JSONValue<Any> = .present(String.randomNumericString(of: 10)),
+      name: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      title: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      organization: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      address1: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      address2: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      city: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      stateOrProvince: JSONValue<Any> = .present(String.randomNumericString(of: 2)),
+      country: JSONValue<Any> = .present(String.randomNumericString(of: 5)),
+      zipCode: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 5)),
+      telephone: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      fax: JSONValue<Any> = .present(String.randomNumericString(of: 10)),
+      email: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      url: JSONValue<Any> = .present("https://localhost:8080/"),
+      value: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10))
+    ) -> [String: Any] {
+      dictionary([
+        "classType": classType,
+        "handle": handle,
+        "name": name,
+        "title": title,
+        "organization": organization,
+        "address1": address1,
+        "address2": address2,
+        "city": city,
+        "stateOrProvince": stateOrProvince,
+        "country": country,
+        "zipCode": zipCode,
+        "telephone": telephone,
+        "fax": fax,
+        "email": email,
+        "url": url,
+        "value": value,
+      ])
+    }
+
   #endif
 
 }

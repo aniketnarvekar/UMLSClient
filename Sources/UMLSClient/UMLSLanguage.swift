@@ -1,6 +1,7 @@
 // UMLSLanguage.swift
 
 import Foundation
+import WebURL
 
 #if SourceVocabulary
 
@@ -13,8 +14,8 @@ import Foundation
 
   // MARK: - Object Type Specification
 
-  public protocol UMLSTypeCodable: Codable {
-    associatedtype Object: Codable
+  public protocol UMLSTypeDecodable: Decodable {
+    associatedtype Object: Decodable
     var object: Object { get }
   }
 
@@ -59,7 +60,7 @@ import Foundation
 
   // MARK: Specification
 
-  public protocol UMLSLanguageType: UMLSTypeCodable
+  public protocol UMLSLanguageType: UMLSTypeDecodable
   where Self.Object: UMLSLanguage {}
 
   // MARK: Implementation
@@ -124,11 +125,13 @@ import Foundation
 
     /// The postal or ZIP code of the address.
     var zipCode: String? { get }
+
   }
 
-  // MARK: Implementation
+  // MARK: Specification
 
   public struct UMLSPostalAddress: UMLSAddress, Decodable {
+
     public var address1: String?
     public var address2: String?
     public var city: String?
@@ -155,7 +158,6 @@ import Foundation
 
     public init(from decoder: any Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)
-
       self.address1 = try UMLSPostalAddress.stringOrNil(from: container, forKey: .address1)
       self.address2 = try UMLSPostalAddress.stringOrNil(from: container, forKey: .address2)
       self.city = try UMLSPostalAddress.stringOrNil(from: container, forKey: .city)
@@ -163,6 +165,129 @@ import Foundation
         from: container, forKey: .stateOrProvince)
       self.country = try UMLSPostalAddress.stringOrNil(from: container, forKey: .country)
       self.zipCode = try UMLSPostalAddress.stringOrNil(from: container, forKey: .zipCode)
+    }
+
+  }
+
+  // MARK: - Creator Contact Information
+
+  // MARK: Specification
+
+  public protocol UMLSCreatorContactInformation {
+    associatedtype Address: UMLSAddress
+    var handle: String? { get }
+    /// A name of the creator.
+    var name: String? { get }
+    /// A creator's research title.
+    var title: String? { get }
+    /// A name of the organization.
+    var organization: String? { get }
+    /// An address 1.
+    var address: Address { get }
+    /// A telephone number.
+    var telephone: String? { get }
+    /// A fax number.
+    var fax: String? { get }
+    /// An email address.
+    var email: String? { get }
+    /// A website address.
+    var url: WebURL? { get }
+    /// A string string in which respective values are extracted.
+    var value: String { get }
+  }
+
+  // MARK: Implementation
+
+  // An object that encapsulates decoded creator contact information.
+  public struct UMLSCreatorContact<Address: UMLSAddress & Decodable>: UMLSCreatorContactInformation {
+    public var handle: String?
+    public var name: String?
+    public var title: String?
+    public var organization: String?
+    public let address: Address
+    public var telephone: String?
+    public var fax: String?
+    public var email: String?
+    public var url: WebURL?
+    public var value: String
+  }
+
+  extension UMLSCreatorContact: Decodable {
+
+    private enum CodingKeys: CodingKey {
+      case handle
+      case name
+      case title
+      case organization
+      case telephone
+      case fax
+      case email
+      case url
+      case value
+    }
+
+    public init(from decoder: any Decoder) throws {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+
+      self.handle = try container.decodeTrimmedStringOrNil(forKey: .handle)
+      self.name = try container.decodeTrimmedStringOrNil(forKey: .name)
+      self.title = try container.decodeTrimmedStringOrNil(forKey: .title)
+      self.organization = try container.decodeTrimmedStringOrNil(forKey: .organization)
+      self.telephone = try container.decodeTrimmedStringOrNil(forKey: .telephone)
+      self.fax = try container.decodeTrimmedStringOrNil(forKey: .fax)
+      self.email = try container.decodeTrimmedStringOrNil(forKey: .email)
+      let urlStringOrNull = try container.decodeTrimmedStringOrNil(forKey: .url)
+      if urlStringOrNull != nil {
+        self.url = try container.decode(WebURL.self, forKey: .url)
+      }
+      let value = try container.decode(String.self, forKey: .value)
+      guard !value.isEmpty else {
+        throw DecodingError.dataCorruptedError(
+          forKey: .value, in: container, debugDescription: "Empty \"value\" key value.")
+      }
+      self.value = value
+
+      let singleValueContainer = try decoder.singleValueContainer()
+      self.address = try singleValueContainer.decode(Address.self)
+
+    }
+
+  }
+
+  // MARK: - Creator Contact Information Object Type
+
+  // MARK: Specification
+
+  public protocol UMLSCreatorContactInformationType: UMLSTypeDecodable
+  where Self.Object: UMLSCreatorContactInformation {}
+
+  // MARK: Implementation
+
+  public struct UMLSCreatorContactInformationTypeObject<T: UMLSCreatorContactInformation & Decodable>:
+    UMLSCreatorContactInformationType
+  {
+    public let object: T
+
+    private enum CodingKeys: CodingKey {
+      case classType
+    }
+
+    public init(from decoder: any Decoder) throws {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+
+      let classTypeString = try container.decode(String.self, forKey: .classType)
+        .trimmingCharacters(in: .whitespacesAndNewlines)
+      guard let classType = UMLSObject(rawValue: classTypeString) else {
+        throw DecodingError.dataCorruptedError(
+          forKey: .classType, in: container, debugDescription: "")
+      }
+      guard classType == .contentInfo else {
+        throw DecodingError.dataCorruptedError(
+          forKey: .classType, in: container, debugDescription: "")
+      }
+
+      let singleValueContainer = try decoder.singleValueContainer()
+      self.object = try singleValueContainer.decode(T.self)
 
     }
 

@@ -77,4 +77,10 @@ extension KeyedDecodingContainerProtocol {
     return result
   }
 
+  public func decodeTrimmedStringOrNil(forKey key: Self.Key) throws -> String? {
+    let string = try decode(String.self, forKey: key).trimmingCharacters(
+      in: .whitespacesAndNewlines)
+    return ![.none, ""].contains(string) ? string : nil
+  }
+
 }
