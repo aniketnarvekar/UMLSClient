@@ -34,7 +34,7 @@ jobs:
 
       # Run tests
       - name: Run tests
-        run: make test
+        run: make -f Makefile.ac test
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
           DOPPLER_CONFIG: ${{ secrets.DOPPLER_CONFIG }}
@@ -44,10 +44,11 @@ jobs:
           UMLS_HOST: ${{ secrets.UMLS_HOST }}
           UMLS_VERSION: ${{ secrets.UMLS_HOST  }}
           UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
+          UMLSCLIENT_UPCOMING_FEATURES: ${{  }}
 
       # Run upcomming tests
-      - name: Run tests
-        run: make test
+      - name: Run upcomming tests
+        run: make -f Makefile.ac test
         env:
           DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
           DOPPLER_CONFIG: ${{ secrets.DOPPLER_CONFIG }}
