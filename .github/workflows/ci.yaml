@@ -44,7 +44,6 @@ jobs:
           UMLS_HOST: ${{ secrets.UMLS_HOST }}
           UMLS_VERSION: ${{ secrets.UMLS_HOST  }}
           UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
-          UMLSCLIENT_UPCOMING_FEATURES: ${{  }}
 
       # Run upcomming tests
       - name: Run upcomming tests
