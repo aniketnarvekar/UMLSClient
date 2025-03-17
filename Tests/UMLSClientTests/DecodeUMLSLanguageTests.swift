@@ -1427,10 +1427,10 @@ final class DecodeUMLSLanguageAbbreviationTests: XCTestCase, XCTDecodingErrorAss
 
   }
 
-  final class DecodeUMLSCreatorContactInformationTypeObjectTests: XCTestCase,
+  final class UMLSContactInformationTypeObjectTests: XCTestCase,
     XCTDecodingErrorAssertion
   {
-    typealias Element = UMLSCreatorContactInformationTypeObject<
+    typealias Element = UMLSContactInformationTypeObject<
       UMLSCreatorContact<UMLSPostalAddress>
     >
 

@@ -287,19 +287,11 @@ import WebURL
 
   }
 
-  // MARK: - Creator Contact Information Object Type
+  // MARK: - Contact Information Type Object
 
-  // MARK: Specification
-
-  public protocol UMLSCreatorContactInformationType: UMLSTypeDecodable
-  where Self.Object: UMLSCreatorContactInformation {}
-
-  // MARK: Implementation
-
-  public struct UMLSCreatorContactInformationTypeObject<
-    T: UMLSCreatorContactInformation & Decodable
-  >:
-    UMLSCreatorContactInformationType
+  public struct UMLSContactInformationTypeObject<
+    T: UMLSContactInformation & Decodable
+  >: Decodable
   {
     public let object: T
 
