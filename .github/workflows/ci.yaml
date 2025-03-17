@@ -44,3 +44,17 @@ jobs:
           UMLS_HOST: ${{ secrets.UMLS_HOST }}
           UMLS_VERSION: ${{ secrets.UMLS_HOST  }}
           UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
+
+      # Run upcomming tests
+      - name: Run tests
+        run: make test
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+          DOPPLER_CONFIG: ${{ secrets.DOPPLER_CONFIG }}
+          DOPPLER_ENVIRONMENT: ${{ secrets.DOPPLER_ENVIRONMENT }}
+          DOPPLER_PROJECT: ${{ secrets.DOPPLER_PROJECT  }}
+          UMLS_API_KEY: ${{ secrets.UMLS_API_KEY }}
+          UMLS_HOST: ${{ secrets.UMLS_HOST }}
+          UMLS_VERSION: ${{ secrets.UMLS_HOST  }}
+          UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
+          UMLSCLIENT_UPCOMING_FEATURES: ${{ secrets.UMLSCLIENT_UPCOMING_FEATURES }}
