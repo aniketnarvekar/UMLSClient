@@ -169,11 +169,9 @@ import WebURL
 
   }
 
-  // MARK: - Creator Contact Information
+  // MARK: - Contact Information
 
-  // MARK: Specification
-
-  public protocol UMLSCreatorContactInformation {
+  public protocol UMLSContactInformation {
     associatedtype Address: UMLSAddress
     var handle: String? { get }
     /// A name of the creator.
@@ -194,12 +192,71 @@ import WebURL
     var url: WebURL? { get }
     /// A string string in which respective values are extracted.
     var value: String { get }
+
+    init(
+      handle: String?, name: String?, title: String?, organization: String?,
+      address: Address, telephone: String?, fax: String?, email: String?,
+      url: WebURL?, value: String
+    )
   }
+
+  private enum UMLSContactInformationCodingKeys: CodingKey {
+    case handle
+    case name
+    case title
+    case organization
+    case telephone
+    case fax
+    case email
+    case url
+    case value
+  }
+
+  extension UMLSContactInformation where Self.Address: Decodable, Self: Decodable {
+
+    public init(from decoder: any Decoder) throws {
+      let container = try decoder.container(keyedBy: UMLSContactInformationCodingKeys.self)
+      let handle = try container.decodeTrimmedStringOrNil(forKey: .handle)
+      let name = try container.decodeTrimmedStringOrNil(forKey: .name)
+      let title = try container.decodeTrimmedStringOrNil(forKey: .title)
+      let organization = try container.decodeTrimmedStringOrNil(forKey: .organization)
+      let telephone = try container.decodeTrimmedStringOrNil(forKey: .telephone)
+      let fax = try container.decodeTrimmedStringOrNil(forKey: .fax)
+      let email = try container.decodeTrimmedStringOrNil(forKey: .email)
+      let urlStringOrNull = try container.decodeTrimmedStringOrNil(forKey: .url)
+      var url: WebURL?
+      if urlStringOrNull != nil {
+        url = try container.decode(WebURL.self, forKey: .url)
+      }
+      let value = try container.decode(String.self, forKey: .value)
+      guard !value.isEmpty else {
+        throw DecodingError.dataCorruptedError(
+          forKey: .value, in: container, debugDescription: "Empty \"value\" key value.")
+      }
+
+      let singleValueContainer = try decoder.singleValueContainer()
+      let address = try singleValueContainer.decode(Address.self)
+
+      self.init(
+        handle: handle, name: name, title: title, organization: organization, address: address,
+        telephone: telephone, fax: fax, email: email, url: url, value: value)
+
+    }
+
+  }
+
+  // MARK: - Creator Contact Information
+
+  // MARK: Specification
+
+  public protocol UMLSCreatorContactInformation: UMLSContactInformation {}
 
   // MARK: Implementation
 
   // An object that encapsulates decoded creator contact information.
-  public struct UMLSCreatorContact<Address: UMLSAddress & Decodable>: UMLSCreatorContactInformation {
+  public struct UMLSCreatorContact<Address: UMLSAddress & Decodable>: UMLSCreatorContactInformation, Decodable
+  {
+
     public var handle: String?
     public var name: String?
     public var title: String?
@@ -210,46 +267,22 @@ import WebURL
     public var email: String?
     public var url: WebURL?
     public var value: String
-  }
 
-  extension UMLSCreatorContact: Decodable {
-
-    private enum CodingKeys: CodingKey {
-      case handle
-      case name
-      case title
-      case organization
-      case telephone
-      case fax
-      case email
-      case url
-      case value
-    }
-
-    public init(from decoder: any Decoder) throws {
-      let container = try decoder.container(keyedBy: CodingKeys.self)
-
-      self.handle = try container.decodeTrimmedStringOrNil(forKey: .handle)
-      self.name = try container.decodeTrimmedStringOrNil(forKey: .name)
-      self.title = try container.decodeTrimmedStringOrNil(forKey: .title)
-      self.organization = try container.decodeTrimmedStringOrNil(forKey: .organization)
-      self.telephone = try container.decodeTrimmedStringOrNil(forKey: .telephone)
-      self.fax = try container.decodeTrimmedStringOrNil(forKey: .fax)
-      self.email = try container.decodeTrimmedStringOrNil(forKey: .email)
-      let urlStringOrNull = try container.decodeTrimmedStringOrNil(forKey: .url)
-      if urlStringOrNull != nil {
-        self.url = try container.decode(WebURL.self, forKey: .url)
-      }
-      let value = try container.decode(String.self, forKey: .value)
-      guard !value.isEmpty else {
-        throw DecodingError.dataCorruptedError(
-          forKey: .value, in: container, debugDescription: "Empty \"value\" key value.")
-      }
+    public init(
+      handle: String? = nil, name: String? = nil, title: String? = nil, organization: String? = nil,
+      address: Address, telephone: String? = nil, fax: String? = nil, email: String? = nil,
+      url: WebURL? = nil, value: String
+    ) {
+      self.handle = handle
+      self.name = name
+      self.title = title
+      self.organization = organization
+      self.address = address
+      self.telephone = telephone
+      self.fax = fax
+      self.email = email
+      self.url = url
       self.value = value
-
-      let singleValueContainer = try decoder.singleValueContainer()
-      self.address = try singleValueContainer.decode(Address.self)
-
     }
 
   }
@@ -263,7 +296,9 @@ import WebURL
 
   // MARK: Implementation
 
-  public struct UMLSCreatorContactInformationTypeObject<T: UMLSCreatorContactInformation & Decodable>:
+  public struct UMLSCreatorContactInformationTypeObject<
+    T: UMLSCreatorContactInformation & Decodable
+  >:
     UMLSCreatorContactInformationType
   {
     public let object: T
@@ -289,6 +324,48 @@ import WebURL
       let singleValueContainer = try decoder.singleValueContainer()
       self.object = try singleValueContainer.decode(T.self)
 
+    }
+
+  }
+
+  // MARK: - License Contact Information
+
+  // MARK: Specification
+
+  public protocol UMLSLicenseContactInformation: UMLSContactInformation {}
+
+  // MARK: Implementation
+
+  public struct UMLSLicenseContact<Address: UMLSAddress & Decodable>: UMLSLicenseContactInformation,
+    Decodable
+  {
+
+    public var handle: String?
+    public var name: String?
+    public var title: String?
+    public var organization: String?
+    public var address: Address
+    public var telephone: String?
+    public var fax: String?
+    public var email: String?
+    public var url: WebURL?
+    public var value: String
+
+    public init(
+      handle: String? = nil, name: String? = nil, title: String? = nil, organization: String? = nil,
+      address: Address, telephone: String? = nil, fax: String? = nil, email: String? = nil,
+      url: WebURL? = nil, value: String
+    ) {
+      self.handle = handle
+      self.name = name
+      self.title = title
+      self.organization = organization
+      self.address = address
+      self.telephone = telephone
+      self.fax = fax
+      self.email = email
+      self.url = url
+      self.value = value
     }
 
   }
