@@ -277,4 +277,6 @@ extension UMLSUI where U == UMLSTUI {
 
   extension UMLSLanguageName: RandomGenerator {}
 
+  extension UMLSContextType: RandomGenerator {}
+
 #endif

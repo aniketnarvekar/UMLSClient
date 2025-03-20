@@ -181,6 +181,43 @@ enum JSONSerializationDictionary {
       ])
     }
 
+    static func sourceVocabulary(
+      classType: JSONValue<Any> = .present("RootSource"),
+      abbreviation: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      expanededForm: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      family: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      language: JSONValue<Any> = .present(languageInfo()),
+      restrictionLevel: JSONValue<Any> = .present(UInt.random(in: 0..<10)),
+      acquisitionContact: JSONValue<Any> = .present(
+        ["NONE", .randomAlphaNumericString(of: 10)].randomElement()!),
+      contentContact: JSONValue<Any> = .present(creatorContact()),
+      licenseContact: JSONValue<Any> = .present(creatorContact()),
+      contextType: JSONValue<Any> = .present(UMLSContextType.random().rawValue),
+      shortName: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      hierarchicalName: JSONValue<Any> = .present(
+        ["NONE", .randomAlphaNumericString(of: 10)].randomElement()!),
+      preferredName: JSONValue<Any> = .present(String.randomAlphaNumericString(of: 10)),
+      synonymousNames: JSONValue<Any> = .present(
+        ["NONE", .randomAlphaNumericString(of: 10)].randomElement()!)
+    ) -> [String: Any] {
+      dictionary([
+        "classType": classType,
+        "abbreviation": abbreviation,
+        "expandedForm": expanededForm,
+        "family": family,
+        "language": language,
+        "restrictionLevel": restrictionLevel,
+        "acquisitionContact": acquisitionContact,
+        "contentContact": contentContact,
+        "licenseContact": licenseContact,
+        "contextType": contextType,
+        "shortName": shortName,
+        "hierarchicalName": hierarchicalName,
+        "preferredName": preferredName,
+        "synonymousNames": synonymousNames,
+      ])
+    }
+
   #endif
 
 }

@@ -2994,7 +2994,7 @@ public enum UMLSSemanticType: String, Codable, Sendable, CaseIterable {
 #if SourceVocabulary
 
   /// The UMLS language name
-  public enum UMLSLanguageName: String, Codable, CaseIterable {
+  public enum UMLSLanguageName: String, Codable, CaseIterable, Sendable {
     case arabic = "Arabic"
     case basque = "Basque"
     case chinese = "Chinese"
@@ -3022,6 +3022,12 @@ public enum UMLSSemanticType: String, Codable, Sendable, CaseIterable {
     case swedish = "Swedish"
     case turkish = "Turkish"
     case ukrainian = "Ukrainian"
+  }
+
+  public enum UMLSContextType: String, Decodable, Sendable, CaseIterable {
+    case full = "FULL"
+    case fullMultiple = "FULL-MULTIPLE"
+    case none = "NONE"
   }
 
 #endif

@@ -10,6 +10,7 @@ import WebURL
   public enum UMLSObject: String, Codable {
     case language = "Language"
     case contentInfo = "ContactInformation"
+    case sourceVocabulary = "RootSource"
   }
 
   // MARK: - Object Type Specification
@@ -47,7 +48,7 @@ import WebURL
 
   }
 
-  extension UMLSLanguageInfo: Codable {
+  extension UMLSLanguageInfo: Decodable, Sendable {
 
     private enum CodingKeys: String, CodingKey {
       case abbreviation
@@ -65,8 +66,8 @@ import WebURL
 
   // MARK: Implementation
 
-  public struct UMLSLanguageTypeObject<U: UMLSLanguage & Codable>: UMLSLanguageType,
-    Codable
+  public struct UMLSLanguageTypeObject<U: UMLSLanguage & Decodable & Sendable>: UMLSLanguageType,
+    Decodable, Sendable
   {
 
     public var object: U
@@ -93,12 +94,6 @@ import WebURL
 
       let singleValueContainer = try decoder.singleValueContainer()
       self.object = try singleValueContainer.decode(U.self)
-    }
-
-    public func encode(to encoder: any Encoder) throws {
-      var container = encoder.container(keyedBy: CodingKeys.self)
-      try container.encode(UMLSObject.language, forKey: .classType)
-      try self.object.encode(to: encoder)
     }
   }
 
@@ -130,7 +125,7 @@ import WebURL
 
   // MARK: Specification
 
-  public struct UMLSPostalAddress: UMLSAddress, Decodable {
+  public struct UMLSPostalAddress: UMLSAddress, Decodable, Sendable {
 
     public var address1: String?
     public var address2: String?
@@ -225,8 +220,8 @@ import WebURL
       let email = try container.decodeTrimmedStringOrNil(forKey: .email)
       let urlStringOrNull = try container.decodeTrimmedStringOrNil(forKey: .url)
       var url: WebURL?
-      if urlStringOrNull != nil {
-        url = try container.decode(WebURL.self, forKey: .url)
+      if let urlString = urlStringOrNull {
+        url = WebURL(urlString)
       }
       let value = try container.decode(String.self, forKey: .value)
       guard !value.isEmpty else {
@@ -254,7 +249,9 @@ import WebURL
   // MARK: Implementation
 
   // An object that encapsulates decoded creator contact information.
-  public struct UMLSCreatorContact<Address: UMLSAddress & Decodable>: UMLSCreatorContactInformation, Decodable
+  public struct UMLSCreatorContact<Address: UMLSAddress & Decodable & Sendable>:
+    UMLSCreatorContactInformation,
+    Decodable & Sendable
   {
 
     public var handle: String?
@@ -289,10 +286,14 @@ import WebURL
 
   // MARK: - Contact Information Type Object
 
+  public protocol UMLSContactInformationType {
+    associatedtype Object: UMLSContactInformation
+    var object: Object { get }
+  }
+
   public struct UMLSContactInformationTypeObject<
-    T: UMLSContactInformation & Decodable
-  >: Decodable
-  {
+    T: UMLSContactInformation & Decodable & Sendable
+  >: UMLSContactInformationType, Decodable, Sendable {
     public let object: T
 
     private enum CodingKeys: CodingKey {
@@ -328,8 +329,9 @@ import WebURL
 
   // MARK: Implementation
 
-  public struct UMLSLicenseContact<Address: UMLSAddress & Decodable>: UMLSLicenseContactInformation,
-    Decodable
+  public struct UMLSLicenseContact<Address: UMLSAddress & Decodable & Sendable>:
+    UMLSLicenseContactInformation,
+    Decodable, Sendable
   {
 
     public var handle: String?
@@ -360,6 +362,140 @@ import WebURL
       self.value = value
     }
 
+  }
+
+  // MARK: - Source Vocabulary
+
+  public protocol UMLSSourceVocabularyInformation {
+    associatedtype Language: UMLSLanguageType
+    associatedtype CreatorContactType: UMLSContactInformationType
+    where CreatorContactType.Object: UMLSCreatorContactInformation
+    associatedtype LicenseContactType: UMLSContactInformationType
+    where LicenseContactType.Object: UMLSLicenseContactInformation
+    var abbreviation: String { get }
+    var expandedForm: String { get }
+    var family: String { get }
+    var language: Language { get }
+    var restrictionLevel: UInt8 { get }
+    var acquisitionContact: String? { get }
+    var contentContact: CreatorContactType { get }
+    var licenseContact: LicenseContactType { get }
+    var contextType: UMLSContextType { get }
+    var shortName: String { get }
+    var hierarchicalName: String? { get }
+    var preferredName: String { get }
+    var synonymousNames: String? { get }
+  }
+
+  public struct UMLSSourceVocabularyInfo<
+    Language: UMLSLanguage & Decodable & Sendable,
+    CreatorContact: UMLSCreatorContactInformation & Decodable & Sendable,
+    LicenseContact: UMLSLicenseContactInformation & Decodable & Sendable
+  >: UMLSSourceVocabularyInformation, Decodable, Sendable {
+    public var abbreviation: String
+    public var expandedForm: String
+    public var family: String
+    public var language: UMLSLanguageTypeObject<Language>
+    public var restrictionLevel: UInt8
+    public var acquisitionContact: String?
+    public var contentContact: UMLSContactInformationTypeObject<CreatorContact>
+    public var licenseContact: UMLSContactInformationTypeObject<LicenseContact>
+    public var contextType: UMLSContextType
+    public var shortName: String
+    public var hierarchicalName: String?
+    public var preferredName: String
+    public var synonymousNames: String?
+
+    private enum CodingKeys: CodingKey {
+      case abbreviation
+      case expandedForm
+      case family
+      case language
+      case restrictionLevel
+      case acquisitionContact
+      case contentContact
+      case licenseContact
+      case contextType
+      case shortName
+      case hierarchicalName
+      case preferredName
+      case synonymousNames
+    }
+
+    public init(from decoder: any Decoder) throws {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+
+      guard let abbreviation = try container.decodeNoneString(forKey: .abbreviation) else {
+        throw DecodingError.dataCorruptedError(forKey: .abbreviation, in: container, debugDescription: "Invalid abbreviation \"NONE\" or \"\".")
+      }
+      self.abbreviation = abbreviation.trimmingCharacters(in: .whitespacesAndNewlines)
+
+      guard let expandedForm = try container.decodeNoneString(forKey: .expandedForm) else {
+        throw DecodingError.dataCorruptedError(forKey: .expandedForm, in: container, debugDescription: "Invalid expandedForm \"NONE\" or \"\".")
+      }
+      self.expandedForm = expandedForm.trimmingCharacters(in: .whitespacesAndNewlines)
+
+      guard let family = try container.decodeNoneString(forKey: .family) else {
+        throw DecodingError.dataCorruptedError(forKey: .family, in: container, debugDescription: "Invalid family \"NONE\" or \"\".")
+      }
+      self.family = family.trimmingCharacters(in: .whitespacesAndNewlines)
+
+      self.language = try container.decode(UMLSLanguageTypeObject<Language>.self, forKey: .language)
+      self.restrictionLevel = try container.decode(UInt8.self, forKey: .restrictionLevel)
+      self.acquisitionContact = try container.decodeNoneString(forKey: .acquisitionContact)?.trimmingCharacters(in: .whitespacesAndNewlines)
+      self.contentContact = try container.decode(
+        UMLSContactInformationTypeObject<CreatorContact>.self, forKey: .contentContact)
+      self.licenseContact = try container.decode(
+        UMLSContactInformationTypeObject<LicenseContact>.self, forKey: .licenseContact)
+
+      let contextTypeString = try container.decode(String.self, forKey: .contextType).trimmingCharacters(in: .whitespacesAndNewlines)
+      guard let contextType = UMLSContextType(rawValue: contextTypeString) else {
+        throw DecodingError.dataCorruptedError(forKey: .contextType, in: container, debugDescription: "Unsupported contextType \(contextTypeString)")
+      }
+      self.contextType = contextType
+
+      guard let shortName = try container.decodeNoneString(forKey: .shortName) else {
+        throw DecodingError.dataCorruptedError(forKey: .shortName, in: container, debugDescription: "Invalid shortName \"NONE\" or \"\".")
+      }
+      self.shortName = shortName.trimmingCharacters(in: .whitespacesAndNewlines)
+
+      self.hierarchicalName = try container.decodeNoneString(forKey: .hierarchicalName)?.trimmingCharacters(in: .whitespacesAndNewlines)
+      guard let preferredName = try container.decodeNoneString(forKey: .preferredName) else {
+        throw DecodingError.dataCorruptedError(forKey: .preferredName, in: container, debugDescription: "Invalid preferredName \"NONE\" or \"\".")
+      }
+      self.preferredName = preferredName.trimmingCharacters(in: .whitespacesAndNewlines)
+
+      self.synonymousNames = try container.decodeNoneString(forKey: .synonymousNames)?.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+  }
+
+  // MARK: - Source vocabulary type
+
+  public protocol UMLSSourceVocabularyType: UMLSTypeDecodable
+  where Self.Object: UMLSSourceVocabularyInformation {}
+
+  // MARK: Implementation
+
+  public struct UMLSSourceVocabularyTypeObject<
+    T: UMLSSourceVocabularyInformation & Decodable & Sendable
+  >: UMLSSourceVocabularyType, Sendable {
+    public var object: T
+
+    private enum CodingKeys: CodingKey {
+      case classType
+    }
+
+    public init(from decoder: any Decoder) throws {
+      let container = try decoder.container(keyedBy: CodingKeys.self)
+      let classType = try container.decode(UMLSObject.self, forKey: .classType)
+      guard classType == .sourceVocabulary else {
+        throw DecodingError.dataCorruptedError(
+          forKey: .classType, in: container, debugDescription: "Unsupported class type.")
+      }
+
+      let singleValueContainer = try decoder.singleValueContainer()
+      self.object = try singleValueContainer.decode(T.self)
+    }
   }
 
 #endif
