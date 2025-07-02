@@ -13,19 +13,23 @@ let package = Package(
       targets: ["UMLSClient"])
   ],
   dependencies: [
-    .package(url: "https://github.com/karwa/swift-url", .upToNextMinor(from: "0.4.0"))
+    .package(url: "https://github.com/karwa/swift-url", .upToNextMinor(from: "0.4.0")),
+    .package(path: "../UMLSClientModel"),
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
     // Targets can depend on other targets in this package and products from dependencies.
     .target(
-      name: "UMLSClient", dependencies: [.product(name: "WebURL", package: "swift-url")]),
+      name: "UMLSClient",
+      dependencies: [
+        .product(name: "WebURL", package: "swift-url"),
+        .product(name: "UMLSClientModel", package: "UMLSClientModel"),
+      ]),
     .testTarget(
       name: "UMLSClientTests",
       dependencies: ["UMLSClient", .product(name: "WebURL", package: "swift-url")],
       resources: [
         .process("Stubs/")
-      ]
-    ),
+      ]),
   ]
 )

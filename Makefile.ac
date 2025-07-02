@@ -21,7 +21,7 @@ build:
 
 test:
 	@echo "=> Testing..."
-	@swift test --quiet --parallel --enable-code-coverage $(SWIFT_FLAGS) $(TEST_FILTER_FLAG)
+	@swift test --quiet --enable-code-coverage $(SWIFT_FLAGS) $(TEST_FILTER_FLAG)
 
 tests:
 	@echo "=> Listing test methods."

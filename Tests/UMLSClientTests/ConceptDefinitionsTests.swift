@@ -6,11 +6,19 @@ import XCTest
 
 extension UMLSPage {
 
+  /// Create total number of test pages.
+  ///
+  /// - Returns: Return integer > 0.
   func getTestPageCount() -> Int {
     let contentCount = Int(UMLSClient.getTestContentSize())
     var result = contentCount / size
     result += contentCount % size > 0 ? 1 : 0
     return result
+  }
+
+  /// Return `true` iff page size is equal to test content size else `false`.
+  var isPageHasAllData: Bool {
+    getTestPageCount() == 1
   }
 
 }

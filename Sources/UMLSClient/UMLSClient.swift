@@ -1,6 +1,7 @@
 // UMLSClient.swift
 
 import Foundation
+import UMLSClientModel
 
 public enum UMLSError: Error {
   case sessionError(error: Error)
@@ -240,6 +241,50 @@ extension __UMLSSemanticTypeController: UMLSSemanticTypeController {
 
 }
 
+private class __UMLSSourceVocabularyController: UMLSRestAPIClient {
+  var baseURL: URL
+  var apiKey: String
+  var session: URLSession
+  var decoder: JSONDecoder
+  var version: UMLSVersion
+
+  public init(
+    apiKey: String,
+    baseURL: URL,
+    version: UMLSVersion,
+    session: URLSession = .shared,
+    decoder: JSONDecoder = .init()
+  ) {
+    self.apiKey = apiKey
+    self.baseURL = baseURL
+    self.version = version
+    self.session = session
+    self.decoder = decoder
+  }
+
+}
+
+extension __UMLSSourceVocabularyController: UMLSSourceVocabularyController {
+  func fetchAll() async throws -> UMLSPage<
+    [UMLSSourceVocabularyTypeObject<
+      UMLSSourceVocabularyInfo<
+        UMLSLanguageInfo, UMLSCreatorContact<UMLSPostalAddress>,
+        UMLSLicenseContact<UMLSPostalAddress>
+      >
+    >]
+  > {
+    try await get(
+      UMLSPage<
+        [UMLSSourceVocabularyTypeObject<
+          UMLSSourceVocabularyInfo<
+            UMLSLanguageInfo, UMLSCreatorContact<UMLSPostalAddress>,
+            UMLSLicenseContact<UMLSPostalAddress>
+          >
+        >]
+      >.self, concept: .sourceVocabulary(version: self.version))
+  }
+}
+
 /// UMLS client to query UMLS REST API server.
 public class UMLSClient {
 
@@ -304,6 +349,12 @@ public class UMLSClient {
 
   public func semanticTypeController() -> UMLSSemanticTypeController {
     semanticTypeCon
+  }
+
+  public func sourceVocabularyController() -> UMLSSourceVocabularyController {
+    __UMLSSourceVocabularyController(
+      apiKey: self.apiKey, baseURL: self.baseURL, version: self.version, session: self.session,
+      decoder: self.decoder)
   }
 
 }

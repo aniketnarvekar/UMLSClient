@@ -7,6 +7,7 @@ enum UMLSConceptURI {
   case atoms(using: UMLSConceptAtomParameters, version: UMLSVersion)
   case preferred(for: UMLSUI<UMLSConcept>, version: UMLSVersion)
   case semanticType(for: UMLSUI<UMLSTUI>, version: UMLSVersion)
+  case sourceVocabulary(version: UMLSVersion)
 }
 
 extension UMLSConceptURI {
@@ -166,6 +167,15 @@ extension UMLSConceptURI {
         return
           baseURL
           .appending(path: path)
+      } else {
+        var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
+        component.path = path
+        return component.url!
+      }
+    case .sourceVocabulary(let version):
+      let path = "/metadata/\(version.description)/sources"
+      if #available(iOS 16.0, *) {
+        return baseURL.appending(path: path)
       } else {
         var component = URLComponents(url: baseURL, resolvingAgainstBaseURL: true)!
         component.path = path

@@ -272,11 +272,3 @@ extension UMLSUI where U == UMLSTUI {
   }
 
 }
-
-#if SourceVocabulary
-
-  extension UMLSLanguageName: RandomGenerator {}
-
-  extension UMLSContextType: RandomGenerator {}
-
-#endif
