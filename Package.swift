@@ -14,7 +14,7 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/karwa/swift-url", .upToNextMinor(from: "0.4.0")),
-    .package(path: "../UMLSClientModel"),
+    .package(url: "https://github.com/aniketnarvekar/UMLSClientModel.git", from: .init(0, 0, 1)),
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
