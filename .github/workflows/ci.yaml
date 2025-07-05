@@ -42,7 +42,7 @@ jobs:
           DOPPLER_PROJECT: ${{ secrets.DOPPLER_PROJECT  }}
           UMLS_API_KEY: ${{ secrets.UMLS_API_KEY }}
           UMLS_HOST: ${{ secrets.UMLS_HOST }}
-          UMLS_VERSION: ${{ secrets.UMLS_HOST  }}
+          UMLS_VERSION: ${{ secrets.UMLS_VERSION  }}
           UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
 
       # Run upcomming tests
@@ -55,6 +55,6 @@ jobs:
           DOPPLER_PROJECT: ${{ secrets.DOPPLER_PROJECT  }}
           UMLS_API_KEY: ${{ secrets.UMLS_API_KEY }}
           UMLS_HOST: ${{ secrets.UMLS_HOST }}
-          UMLS_VERSION: ${{ secrets.UMLS_HOST  }}
+          UMLS_VERSION: ${{ secrets.UMLS_VERSION  }}
           UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
           UMLSCLIENT_UPCOMING_FEATURES: ${{ secrets.UMLSCLIENT_UPCOMING_FEATURES }}
