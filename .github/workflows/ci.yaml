@@ -44,6 +44,7 @@ jobs:
           UMLS_HOST: ${{ secrets.UMLS_HOST }}
           UMLS_VERSION: ${{ secrets.UMLS_VERSION  }}
           UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
+          UMLS_ABSENT_STY_ID: ${{ secrets.UMLS_ABSENT_STY_ID }}
 
       # Run upcomming tests
       - name: Run upcomming tests
@@ -58,3 +59,4 @@ jobs:
           UMLS_VERSION: ${{ secrets.UMLS_VERSION  }}
           UMLS_PAGE_CONTENT_SIZE: ${{ secrets.UMLS_PAGE_CONTENT_SIZE }}
           UMLSCLIENT_UPCOMING_FEATURES: ${{ secrets.UMLSCLIENT_UPCOMING_FEATURES }}
+          UMLS_ABSENT_STY_ID: ${{ secrets.UMLS_ABSENT_STY_ID }}
