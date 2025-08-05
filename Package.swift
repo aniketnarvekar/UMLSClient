@@ -14,7 +14,7 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/karwa/swift-url", .upToNextMinor(from: "0.4.0")),
-    .package(url: "https://github.com/aniketnarvekar/UMLSClientModel.git", from: .init(0, 0, 1)),
+    .package(url: "https://github.com/aniketnarvekar/UMLSClientModel.git", from: .init(0, 0, 2)),
   ],
   targets: [
     // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -30,9 +30,7 @@ let package = Package(
       dependencies: [
         "UMLSClient", .product(name: "WebURL", package: "swift-url"),
         .product(name: "Random", package: "UMLSClientModel"),
-      ],
-      resources: [
-        .process("Stubs/")
-      ]),
+      ]
+    ),
   ]
 )
