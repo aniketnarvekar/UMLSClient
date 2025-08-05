@@ -1,6 +1,8 @@
 //  ConceptRelationsTests.swift
 
 import Foundation
+import Random
+import UMLSClientModel
 import XCTest
 
 @testable import UMLSClient
@@ -18,7 +20,7 @@ class ConceptRelationsTests: XCTestCase, UMLSRelationTestUtility {
   }
 
   func testWithDefaultParameters() async throws {
-    let result = try await relations(using: .init(concept: .random()))
+    let result = try await relations(using: .random())
     XCTAssertEqual(result.size, 25)
     XCTAssertEqual(result.number, 1)
     XCTAssertEqual(result.count, result.getTestPageCount())
@@ -35,21 +37,20 @@ class ConceptRelationsTests: XCTestCase, UMLSRelationTestUtility {
 
   func testInvalidAPIKey() async throws {
     try await unautorizedError { client in
-      return try await relations(using: .init(concept: .random()))
+      return try await relations(using: .random())
     }
   }
 
   func testZeroPageSize() async throws {
-    let result = try await relations(
-      using: .init(concept: .random()).setPageInfo(.init(size: 0))
-    )
+    let result = try await relations(using: .random().setPageInfo(.init(size: 0)))
     XCTAssertEqual(result.size, 25)
     XCTAssertLessThanOrEqual(result.element.count, 25)
   }
 
   func testZeroPageNumber() async throws {
     let result = try await relations(
-      using: .init(concept: .random()).setPageInfo(.init(number: 0))
+      using: .random().setPageInfo(
+        .init(number: 0))
     )
     XCTAssertEqual(result.number, 1)
   }
@@ -67,7 +68,7 @@ class ConceptRelationsTests: XCTestCase, UMLSRelationTestUtility {
   func testPageSizeGreaterThan5000AndPageNumberGreaterThan1() async throws {
     try await clientError { client in
       return try await relations(
-        using: .init(concept: .random()).setPageInfo(
+        using: .random().setPageInfo(
           .init(
             size: .init((5001...Int.max).randomElement()!),
             number: .init((2...Int.max).randomElement()!)
@@ -79,14 +80,17 @@ class ConceptRelationsTests: XCTestCase, UMLSRelationTestUtility {
 
   func testSingleRelationLabel() async throws {
     let label = UMLSRelationLabel.random()
-    let result = try await relations(using: .init(concept: .random()).addRelationLabel(label))
+    let result = try await relations(
+      using: .random().addRelationLabel(label)
+    )
     XCTAssertTrue(result.element.every(completion: { $0.relationLabel == label }))
   }
 
   func testSingleSourcevocabulary() async throws {
     let sourceVocabulary = UMLSSourceVocabulary.random()
     let result = try await relations(
-      using: .init(concept: .random()).addSourceVocabulary(sourceVocabulary)
+      using: .random().addSourceVocabulary(
+        sourceVocabulary)
     )
     XCTAssertTrue(result.element.every(completion: { $0.sourceVocabulary == sourceVocabulary }))
   }
@@ -94,8 +98,7 @@ class ConceptRelationsTests: XCTestCase, UMLSRelationTestUtility {
   func testSingleAdditionalRelationLabel() async throws {
     let additionalRelationLabel = UMLSAdditionalRelationLabel.random()
     let result = try await relations(
-      using: .init(concept: .random()).addAdditionalRelationLabel(additionalRelationLabel)
-    )
+      using: .random().addAdditionalRelationLabel(additionalRelationLabel))
     XCTAssertTrue(
       result.element
         .every(completion: { $0.additionalRelationLabel == additionalRelationLabel })
@@ -104,13 +107,17 @@ class ConceptRelationsTests: XCTestCase, UMLSRelationTestUtility {
 
   func testMultipleRelationLabels() async throws {
     let labels: [UMLSRelationLabel] = [.aq, .chd, .del, .none, .par, .qb, .rb, .rn]
-    let result = try await relations(using: .init(concept: .random()).setRelationLabels(labels))
+    let result = try await relations(
+      using: .random().setRelationLabels(
+        labels))
     XCTAssertTrue(result.element.every(completion: { labels.contains($0.relationLabel) }))
   }
 
   func testMultipleSourceVocabularies() async throws {
     let labels: [UMLSSourceVocabulary] = [.air, .alt, .aod, .aot, .atc, .bi, .ccc]
-    let result = try await relations(using: .init(concept: .random()).setSourceVocabulary(labels))
+    let result = try await relations(
+      using: .random().setSourceVocabulary(
+        labels))
     XCTAssertTrue(result.element.every(completion: { labels.contains($0.sourceVocabulary) }))
   }
 
@@ -124,7 +131,9 @@ class ConceptRelationsTests: XCTestCase, UMLSRelationTestUtility {
       .after,
     ]
     let result = try await relations(
-      using: .init(concept: .random()).setAdditionalRelationLabels(labels)
+      using: .random()
+        .setAdditionalRelationLabels(
+          labels)
     )
     XCTAssertTrue(
       result.element.every(completion: { labels.contains($0.additionalRelationLabel) })
@@ -132,14 +141,16 @@ class ConceptRelationsTests: XCTestCase, UMLSRelationTestUtility {
   }
 
   func testIncludeObsolete() async throws {
-    let result = try await relations(using: .init(concept: .random()).setIncludeObsolete(true))
+    let result = try await relations(
+      using: .random().setIncludeObsolete(
+        true))
     XCTAssertTrue(result.element.some(completion: { $0.isObsolete }))
     XCTAssertTrue(result.element.some(completion: { !$0.isObsolete }))
   }
 
   func testIncludeSuppressible() async throws {
     let result = try await relations(
-      using: .init(concept: .random()).setIncludeSuppressible(true)
+      using: .random().setIncludeSuppressible(true)
     )
     XCTAssertTrue(result.element.some(completion: { $0.isSuppressible }))
     XCTAssertTrue(result.element.some(completion: { !$0.isSuppressible }))

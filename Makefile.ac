@@ -17,15 +17,19 @@ TEST_FILTER_FLAG := $(foreach test,$(subst :, ,$(XCTEST_FILTER)),--filter $(test
 
 build:
 	@echo "=> Building..."
-	@swift build -q --build-tests $(SWIFT_FLAGS)
+	@swift build --quiet --enable-experimental-prebuilts --explicit-target-dependency-import-check=error $(SWIFT_FLAGS)
+
+build-test:
+	@echo "=> Building with tests...."
+	@swift build --quiet --enable-experimental-prebuilts --build-tests $(SWIFT_FLAGS)
 
 test:
 	@echo "=> Testing..."
-	@swift test --quiet --enable-code-coverage $(SWIFT_FLAGS) $(TEST_FILTER_FLAG)
+	@swift test --quiet --enable-experimental-prebuilts $(SWIFT_FLAGS) $(TEST_FILTER_FLAG)
 
 tests:
 	@echo "=> Listing test methods."
-	@swift test list $(SWIFT_FLAGS)
+	@swift test --quiet --enable-experimental-prebuilts list $(SWIFT_FLAGS)
 
 format:
 	@echo "=> Formatting..."
@@ -35,10 +39,10 @@ lint:
 	@echo "=> Find linting issues..."
 	@swift format lint -r -p -s --color-diagnostics --follow-symlinks .
 
-lldb:
+lldb: build-test
 	@echo "=> Starting LLDB."
 	@lldb -s commands.lldb -Q -- $(XCTEST_EXEC) $(LLDB_DEBUG_TEST_FLAGS) $(TEST_BUNDLE)
 
-repl:
+repl: build
 	@echo "=> Starting swift project REPL"
 	@swift run --repl $(SWIFT_FLAGS)

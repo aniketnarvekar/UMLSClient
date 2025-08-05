@@ -1,12 +1,12 @@
 .PHONY: tests
 
-repl:
+repl: format
 	@doppler run -- make -f Makefile.ac repl
 
-build:
+build: format
 	@doppler run -- make -f Makefile.ac build
 
-test:
+test: format
 	@doppler run -- make -f Makefile.ac test
 
 tests:

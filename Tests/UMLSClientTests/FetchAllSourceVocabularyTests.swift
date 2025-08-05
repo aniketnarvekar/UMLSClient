@@ -1,6 +1,7 @@
 // FetchAllSourceVocabularyTests.swift
 
 import UMLSClient
+import UMLSClientModel
 import XCTest
 
 final class FetchAllSourceVocabularyTests: XCTestCase, UMLSTestUtility {

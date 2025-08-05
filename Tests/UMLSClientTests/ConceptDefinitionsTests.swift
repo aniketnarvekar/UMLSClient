@@ -1,5 +1,7 @@
 //  ConceptDefinitionsTests.swift
 
+import Random
+import UMLSClientModel
 import XCTest
 
 @testable import UMLSClient
@@ -36,7 +38,7 @@ final class ConceptDefinitionsTests: XCTestCase, UMLSTestUtility {
   }
 
   func testWithDefaultRequest() async throws {
-    let params = UMLSConceptDefinitionParametersBuilder(concept: .random())
+    let params = UMLSConceptDefinitionParametersBuilder.random()
       .build()
     let page = try await client.conceptController().definitions(using: params)
     XCTAssertEqual(page.size, 25)
@@ -54,14 +56,14 @@ final class ConceptDefinitionsTests: XCTestCase, UMLSTestUtility {
     self.client = .initializeTestClient(apiKey: .randomAlphaNumericString(of: 30))
 
     try await self.unautorizedError { client in
-      let params = UMLSConceptDefinitionParametersBuilder(concept: .random()).build()
+      let params = UMLSConceptDefinitionParametersBuilder.random().build()
       return try await client.conceptController().definitions(using: params)
     }
 
   }
 
   func testWithZeroPageNumber() async throws {
-    let params = UMLSConceptDefinitionParametersBuilder(concept: .random())
+    let params = UMLSConceptDefinitionParametersBuilder.random()
       .setPageInfo(.init(number: 0))
       .build()
     let page = try await client.conceptController().definitions(using: params)
@@ -76,7 +78,7 @@ final class ConceptDefinitionsTests: XCTestCase, UMLSTestUtility {
     pageNumber: UInt = PageInfo.defaultNumber,
     sourceVocabularies: [UMLSSourceVocabulary] = []
   ) -> UMLSConceptDefinitionParameters {
-    UMLSConceptDefinitionParametersBuilder(concept: .random())
+    UMLSConceptDefinitionParametersBuilder.random()
       .setPageInfo(.init(size: pageSize, number: pageNumber))
       .setSourceVocabulary(sourceVocabularies)
       .build()

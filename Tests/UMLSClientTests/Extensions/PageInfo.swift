@@ -1,6 +1,7 @@
 //  PageInfo.swift
 
 import UMLSClient
+import UMLSClientModel
 
 extension PageInfo {
 

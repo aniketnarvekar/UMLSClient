@@ -1,5 +1,7 @@
 //  PreferredConceptInfoTests.swift
 
+import Random
+import UMLSClientModel
 import XCTest
 
 @testable import UMLSClient

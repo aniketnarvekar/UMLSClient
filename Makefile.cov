@@ -7,18 +7,17 @@ ABSOLUTE_PATHS := $(shell IFS=',' read -ra PATHS <<< "$$SWIFT_SOURCE_FILES"; \
                         echo "$$(realpath "$$path")"; \
                     done)
 
-# The SWIFT_SOURCE_FILES environment
-# variable value is comma seperated
-# relative paths to the swift files
-# which you want code coverage of.
-# If not specified the targets will
-# create code coverage report all
-# the swift files. The targets will
-# ignore Tests and .build directory.
-# In case of a issue perform target
-# build, test from Makefile first.
+# The SWIFT_SOURCE_FILES environment variable value is comma seperated relative
+# paths to the swift files which you want code coverage of. If not specified the
+# targets will create code coverage report all the swift files. The targets will
+# ignore Tests and .build directory. In case of a issue perform target build,
+# test from Makefile first.
 
-report:
+test:
+	@echo "=> Testing for code coverage."
+	@swift test --quiet --enable-code-coverage --enable-experimental-prebuilts
+
+report: test
 	@echo "=> Generating code coverage report."
 	@xcrun --run \
 	llvm-cov report \

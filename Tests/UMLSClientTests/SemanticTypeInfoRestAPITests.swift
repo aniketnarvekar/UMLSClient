@@ -1,5 +1,6 @@
 // SemanticTypeInfoRestAPITests.swift
 
+import UMLSClientModel
 import XCTest
 
 @testable import UMLSClient

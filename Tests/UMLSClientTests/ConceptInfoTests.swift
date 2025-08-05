@@ -1,6 +1,8 @@
 //  ConceptInfoTests.swift
 
+import Random
 import UMLSClient
+import UMLSClientModel
 import XCTest
 
 final class ConceptInfoTests: XCTestCase {

@@ -1,4 +1,5 @@
 import Foundation
+import UMLSClientModel
 
 enum UMLSConceptURI {
   case conceptInfo(for: UMLSUI<UMLSConcept>, version: UMLSVersion)

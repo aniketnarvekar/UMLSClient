@@ -10,7 +10,7 @@ public protocol UMLSSourceVocabularyController {
   func fetchAll() async throws -> UMLSPage<
     [UMLSSourceVocabularyTypeObject<
       UMLSSourceVocabularyInfo<
-        UMLSLanguageInfo, UMLSCreatorContact<UMLSPostalAddress>,
+        UMLSLanguageTypeObject<UMLSLanguageInfo>, UMLSCreatorContact<UMLSPostalAddress>,
         UMLSLicenseContact<UMLSPostalAddress>
       >
     >]

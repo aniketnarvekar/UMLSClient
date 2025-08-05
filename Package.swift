@@ -27,7 +27,10 @@ let package = Package(
       ]),
     .testTarget(
       name: "UMLSClientTests",
-      dependencies: ["UMLSClient", .product(name: "WebURL", package: "swift-url")],
+      dependencies: [
+        "UMLSClient", .product(name: "WebURL", package: "swift-url"),
+        .product(name: "Random", package: "UMLSClientModel"),
+      ],
       resources: [
         .process("Stubs/")
       ]),

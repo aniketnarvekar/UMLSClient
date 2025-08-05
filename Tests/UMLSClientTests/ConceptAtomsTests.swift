@@ -1,5 +1,6 @@
 //  ConceptAtomsTests.swift
 
+import UMLSClientModel
 import XCTest
 
 @testable import UMLSClient
@@ -17,7 +18,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   }
 
   func testWithDefaultRequest() async throws {
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .build()
     let page = try await client.conceptController().atoms(using: params)
     XCTAssertEqual(page.size, 25)
@@ -36,13 +37,13 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   func testWithInvalidAPIKey() async throws {
     self.client = .initializeTestClient(apiKey: .randomAlphaNumericString(of: 30))
     try await self.unautorizedError { client in
-      let params = UMLSConceptAtomParametersBuilder(concept: .random()).build()
+      let params = UMLSConceptAtomParametersBuilder.random().build()
       return try await client.conceptController().atoms(using: params)
     }
   }
 
   func testWithZeroPageSize() async throws {
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .setPageInfo(.init(size: 0))
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -51,7 +52,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   }
 
   func testWithZeroPageNumber() async throws {
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .setPageInfo(.init(number: 0))
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -61,7 +62,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   func testWithPageSizeGreaterThan10000() async throws {
     try await clientError { client in
       let size = (10001...Int.max).randomElement()!
-      let params = UMLSConceptAtomParametersBuilder(concept: .random())
+      let params = UMLSConceptAtomParametersBuilder.random()
         .setPageInfo(.init(size: .init(size)))
         .build()
       return try await client.conceptController().atoms(using: params)
@@ -72,7 +73,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
     try await clientError { client in
       let size = (5001...Int.max).randomElement()!
       let number = (2...Int.max).randomElement()!
-      let params = UMLSConceptAtomParametersBuilder(concept: .random())
+      let params = UMLSConceptAtomParametersBuilder.random()
         .setPageInfo(.init(size: .init(size), number: .init(number)))
         .build()
       return try await client.conceptController().atoms(using: params)
@@ -82,7 +83,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   func testWithPageNumberGreaterThanPageCount() async throws {
     let pageCount = PageInfo().pageCountUsingEnvironment
     let pageNumber = pageCount + 1
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .setPageInfo(.init(number: pageNumber))
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -93,7 +94,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
 
   func testWithSingleSourceVocabulary() async throws {
     let sourceVocabulary = UMLSSourceVocabulary.random()
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .addSourceVocabulary(sourceVocabulary)
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -103,7 +104,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   }
 
   func testWithMultipleSourceVocabularies() async throws {
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .setSourceVocabularies([.air, .alt, .aod, .atc, .bi])
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -115,7 +116,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
 
   func testWithSingleTermType() async throws {
     let tty = UMLSTermType.di
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .addTermType(tty)
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -125,7 +126,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   }
 
   func testWithMultipleTermType() async throws {
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .setTermTypes([.aa, .ab, .ac, .acr, .ad])
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -136,7 +137,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
 
   func testResponseFromSpecificLanguage() async throws {
     let lang = UMLSLanguageAbbreviation.random()
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .setLanguage(lang)
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -146,7 +147,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   }
 
   func testIncludeObsolete() async throws {
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .setIncludeObsolete(true)
       .build()
     let result = try await client.conceptController().atoms(using: params)
@@ -159,7 +160,7 @@ final class ConceptAtomsTests: XCTestCase, UMLSTestUtility {
   }
 
   func testIncludeSuppressible() async throws {
-    let params = UMLSConceptAtomParametersBuilder(concept: .random())
+    let params = UMLSConceptAtomParametersBuilder.random()
       .setIncludeSuppressible(true)
       .build()
     let result = try await client.conceptController().atoms(using: params)
