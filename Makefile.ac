@@ -17,19 +17,19 @@ TEST_FILTER_FLAG := $(foreach test,$(subst :, ,$(XCTEST_FILTER)),--filter $(test
 
 build:
 	@echo "=> Building..."
-	@swift build --quiet --enable-experimental-prebuilts --explicit-target-dependency-import-check=error $(SWIFT_FLAGS)
+	@swift build --quiet $(SWIFT_FLAGS)
 
 build-test:
 	@echo "=> Building with tests...."
-	@swift build --quiet --enable-experimental-prebuilts --build-tests $(SWIFT_FLAGS)
+	@swift build --quiet --build-tests $(SWIFT_FLAGS)
 
 test:
 	@echo "=> Testing..."
-	@swift test --quiet --enable-experimental-prebuilts $(SWIFT_FLAGS) $(TEST_FILTER_FLAG)
+	@swift test --quiet $(SWIFT_FLAGS) $(TEST_FILTER_FLAG)
 
 tests:
 	@echo "=> Listing test methods."
-	@swift test --quiet --enable-experimental-prebuilts list $(SWIFT_FLAGS)
+	@swift test --quiet list $(SWIFT_FLAGS)
 
 format:
 	@echo "=> Formatting..."

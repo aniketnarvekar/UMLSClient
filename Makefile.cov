@@ -15,7 +15,7 @@ ABSOLUTE_PATHS := $(shell IFS=',' read -ra PATHS <<< "$$SWIFT_SOURCE_FILES"; \
 
 test:
 	@echo "=> Testing for code coverage."
-	@swift test --quiet --enable-code-coverage --enable-experimental-prebuilts
+	@swift test --quiet --enable-code-coverage
 
 report: test
 	@echo "=> Generating code coverage report."
